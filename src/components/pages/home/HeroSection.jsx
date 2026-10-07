@@ -584,7 +584,7 @@ const HeroSection = () => {
             <ServicesSection/>
             <FactsSection/>
             <ResumeSection/>
-            <AutoSliderSection/>
+            {/*<AutoSliderSection/>*/}
             <ProjectSliderSection/>
             <SkillSection/>
 

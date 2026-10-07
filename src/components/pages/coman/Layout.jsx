@@ -1,7 +1,7 @@
 import React from 'react';
 import Sidebar from './Sidebar.jsx';
 import Header from './Header.jsx';
-import Footer from "./Footer.jsx";
+import Footer from './Footer.jsx';
 
 export function Layout({ children }) {
     return (
@@ -16,7 +16,12 @@ export function Layout({ children }) {
                 <main className="flex-1">
                     {children}
                 </main>
-                <Footer/>
+
+                {/*<main className="flex-1 pt-[68px]">*/}
+                {/*    {children}*/}
+                {/*</main>*/}
+
+                <Footer />
             </div>
         </div>
     );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Sidebar = () => {
     const [isVisible, setIsVisible] = useState(false);
@@ -23,9 +23,20 @@ const Sidebar = () => {
         <>
             <aside className={`sidebar hidden md:block ${isVisible ? 'visible' : ''}`}>
 
-                <div className="w-11 h-11 absolute mt-[-60px] ml-5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md group-hover:scale-105 transition duration-300">
-                    <span className="text-white text-lg font-bold">L</span>
-                </div>
+                {/*<div className="w-11 h-11 absolute mt-[-60px] ml-5 rounded-xl bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center shadow-md group-hover:scale-105 transition duration-300">*/}
+                {/*    <span className="text-white text-lg font-bold">L</span>*/}
+                {/*</div>*/}
+
+                <a
+                    href="/#home"
+                    className="logo mt-[-60px] ml-5 "
+                >
+                    <div className="logo-icon">
+                                <span className="logo-letter">
+                                    L
+                                </span>
+                    </div>
+                </a>
 
                 <span className="sidebar__decoration"></span>
 
@@ -50,6 +61,127 @@ const Sidebar = () => {
             </aside>
 
             <style jsx>{`
+
+                .logo {
+                    display: flex;
+
+                    align-items: center;
+
+                    gap: .75rem;
+
+                    text-decoration: none;
+
+                    flex-shrink: 0;
+                }
+
+                .logo-icon {
+                    position: relative;
+
+                    width: 36px;
+                    height: 36px;
+
+                    border: 1.5px solid #ffffff;
+
+                    border-radius: 8px;
+
+                    display: flex;
+
+                    align-items: center;
+                    justify-content: center;
+
+                    overflow: hidden;
+
+                    transition:
+                            border-color .3s;
+                }
+
+                .logo:hover .logo-icon {
+                    border-color: #F57500;
+                }
+
+                .logo-icon::before {
+                    content: '';
+
+                    position: absolute;
+
+                    inset: 0;
+
+                    background:
+                            linear-gradient(
+                                    135deg,
+                                    #F57500 0%,
+                                    transparent 65%
+                            );
+
+                    opacity: 0;
+
+                    transition:
+                            opacity .3s;
+                }
+
+                .logo:hover .logo-icon::before {
+                    opacity: 1;
+                }
+
+                .logo-letter {
+                    font-family:
+                            'Space Mono',
+                            monospace;
+
+                    font-size: .9rem;
+
+                    font-weight: 700;
+
+                    color: #F57500;
+
+                    position: relative;
+
+                    z-index: 1;
+
+                    transition: color .3s;
+                }
+
+                .logo:hover .logo-letter {
+                    color: #fff;
+                }
+
+                .logo-text {
+                    display: flex;
+
+                    flex-direction: column;
+
+                    gap: 1px;
+                }
+
+                .logo-name {
+                    font-family:
+                            'Space Mono',
+                            monospace;
+
+                    font-size: .85rem;
+
+                    font-weight: 700;
+
+                    color: #fff;
+
+                    letter-spacing: .05em;
+                }
+
+                .logo-tag {
+                    font-size: .6rem;
+
+                    font-weight: 500;
+
+                    color: #F57500;
+
+                    letter-spacing: .2em;
+
+                    text-transform: uppercase;
+
+                    font-family:
+                            'Inter',
+                            sans-serif;
+                }
                 .sidebar {
                     background: #313131;
                     position: fixed;
