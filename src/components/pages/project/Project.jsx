@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import FooterCTA from "./FooterCTA.jsx";
 
 // Project data
@@ -144,11 +145,11 @@ const tickerItems = ["DESIGN", "BRAND", "DIGITAL", "CRAFT"];
 
 // Height classes for masonry cards
 const heightClasses = {
-    tall: "aspect-[3/4.4]",
+    tall: "aspect-[4/3.4]",
     std: "aspect-[4/3.2]",
-    wide: "aspect-[4/5]",
+    wide: "aspect-[4/3.2]",
     sqr: "aspect-[5/5.5]",
-    ultra: "aspect-[2/3.8]"
+    ultra: "aspect-[4/3.8]"
 };
 
 // Card Component
@@ -234,106 +235,9 @@ const Card = ({ project, index, onOpen, formatNumber }) => {
     );
 };
 
-// Lightbox Component
-const Lightbox = ({ isOpen, currentIndex, projects, onClose, onPrev, onNext }) => {
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const project = projects[currentIndex];
-
-    useEffect(() => {
-        if (isOpen && project) {
-            setImageLoaded(false);
-        }
-    }, [currentIndex, isOpen, project]);
-
-    if (!isOpen || !project) return null;
-
-    const num = String(currentIndex + 1).padStart(2, '0');
-
-    return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-0 md:p-10 opacity-100 pointer-events-auto transition-opacity duration-400">
-            {/* Backdrop */}
-            <div
-                className="absolute inset-0 bg-[rgba(4,4,4,0.92)] backdrop-blur-[20px] saturate-[1.2]"
-                onClick={onClose}
-            />
-
-            {/* Close button */}
-            <button
-                className="fixed top-4 right-4 md:top-6 md:right-6 z-[100] w-10 h-10 md:w-12 md:h-12 bg-[rgba(20,20,20,0.9)] border border-white/10 flex items-center justify-center transition-all duration-200 hover:bg-[#F57500] hover:scale-105     absolute -top-10 -right-10 w-10 h-10 rounded-full bg-[#F57500] border-none flex items-center justify-center transition-transform duration-250 hover:scale-110 hover:rotate-90 z-10"
-                // style={{ clipPath: 'polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%)' }}
-                onClick={onClose}
-            >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 md:w-[18px] md:h-[18px] text-white group-hover:text-[#060606]">
-                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-            </button>
-
-            {/* Content */}
-            <div className="relative z-50 flex flex-col md:flex-row gap-0 md:gap-12 w-full max-w-[1100px] bg-[#0e0e0e] md:bg-transparent rounded-t-xl md:rounded-none transform transition-transform duration-450 overflow-hidden md:overflow-visible max-h-[96dvh] md:max-h-none">
-                {/* Drag handle for mobile */}
-                <div className="md:hidden w-10 h-1 bg-white/20 rounded-full mx-auto " />
-
-                {/* Image area */}
-                <div className="relative flex-1 min-w-0 w-full md:flex-[1.1]">
-                    <div className="relative w-full overflow-hidden border-0 md:border  border-white/10">
-                        <div className="hidden md:block absolute top-0 left-0 w-[2.5px] h-full bg-gradient-to-b from-[#F57500] to-transparent z-20 pointer-events-none" />
-                        <div className="absolute top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-[#F57500] to-[#ff9533] z-20 pointer-events-none" />
-
-                        <img
-                            src={project.img}
-                            alt={project.title}
-                            className="w-full max-h-[58vw] md:max-h-[78vh] object-cover transition-transform duration-600  hover:scale-105"
-                            style={{ opacity: imageLoaded ? 1 : 0, transition: 'opacity 0.4s' }}
-                            onLoad={() => setImageLoaded(true)}
-                        />
-                    </div>
-
-                    {/* Navigation arrows */}
-                    <button
-                        className="absolute top-1/2 left-2 md:left-3 -translate-y-1/2 w-12 h-12 rounded-full bg-white/7 border border-white/15 flex items-center justify-center backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(245,117,0,0.25)] hover:border-[#F57500] hover:scale-108 z-10"
-                        onClick={onPrev}
-                    >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
-                            <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
-                        </svg>
-                    </button>
-                    <button
-                        className="absolute top-1/2 right-2 md:right-3 -translate-y-1/2 w-12 h-12 rounded-full bg-white/7 border border-white/15 flex items-center justify-center backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(245,117,0,0.25)] hover:border-[#F57500] hover:scale-108 z-10"
-                        onClick={onNext}
-                    >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4 text-white">
-                            <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-
-            {/* Dot counter */}
-            <div className="absolute bottom-3 md:bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
-                {projects.map((_, idx) => (
-                    <button
-                        key={idx}
-                        className={`transition-all duration-250 rounded-full ${
-                            idx === currentIndex
-                                ? 'bg-[#F57500] w-5 h-1.5 rounded-[3px] border-[#F57500]'
-                                : 'bg-white/20 w-1.5 h-1.5'
-                        }`}
-                        onClick={() => {
-                            if (idx < currentIndex) onPrev(currentIndex - idx);
-                            else if (idx > currentIndex) onNext(idx - currentIndex);
-                        }}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-};
-
-
-const Project = () => {
+const Project = ({ onSelectProject }) => {
+    const navigate = useNavigate();
     const [activeFilter, setActiveFilter] = useState("all");
-    const [lightboxOpen, setLightboxOpen] = useState(false);
-    const [currentLightboxIndex, setCurrentLightboxIndex] = useState(0);
     const [visibleCount, setVisibleCount] = useState(projectsData.length);
     const [isMounted, setIsMounted] = useState(false);
 
@@ -354,29 +258,13 @@ const Project = () => {
         setActiveFilter(filterId);
     };
 
-    // Get the current project index in filtered list for lightbox
-    const getFilteredIndex = (originalId) => {
-        return filteredProjects.findIndex(p => p.id === originalId);
-    };
-
-    // Lightbox handlers
-    const openLightbox = (filteredIndex) => {
-        setCurrentLightboxIndex(filteredIndex);
-        setLightboxOpen(true);
-        document.body.style.overflow = 'hidden';
-    };
-
-    const closeLightbox = () => {
-        setLightboxOpen(false);
-        document.body.style.overflow = '';
-    };
-
-    const prevProject = () => {
-        setCurrentLightboxIndex((prev) => (prev - 1 + filteredProjects.length) % filteredProjects.length);
-    };
-
-    const nextProject = () => {
-        setCurrentLightboxIndex((prev) => (prev + 1) % filteredProjects.length);
+    // Navigate to project details
+    const openProjectDetails = (filteredIndex) => {
+        const project = filteredProjects[filteredIndex];
+        if (onSelectProject && project) {
+            onSelectProject(project);
+            navigate('/project-deatils');
+        }
     };
 
     // Format number with leading zero
@@ -384,28 +272,8 @@ const Project = () => {
         return num.toString().padStart(2, '0');
     };
 
-    // Keyboard navigation
-    useEffect(() => {
-        const handleKeyDown = (e) => {
-            if (!lightboxOpen) return;
-            if (e.key === 'Escape') closeLightbox();
-            if (e.key === 'ArrowLeft') prevProject();
-            if (e.key === 'ArrowRight') nextProject();
-        };
-        window.addEventListener('keydown', handleKeyDown);
-        return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [lightboxOpen, filteredProjects.length]);
-
-    // Restore body overflow when lightbox closes
-    useEffect(() => {
-        return () => {
-            document.body.style.overflow = '';
-        };
-    }, []);
-
     return (
         <div className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
-
 
             {/* Hero Section */}
             <div className="relative min-h-[80vh] md:min-h-screen flex flex-col justify-end overflow-hidden px-5 md:px-[4.5rem] pb-12 md:pb-[72px]">
@@ -438,11 +306,6 @@ const Project = () => {
                     </div>
                     <div className="absolute top-0 right-[48%] bottom-0 w-[160px] bg-gradient-to-r from-[#060606] to-transparent z-10 hidden md:block" />
                 </div>
-
-                {/* Grain overlay */}
-                {/*<div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-noise" />*/}
-
-
 
                 {/* Ticker */}
                 <div className="absolute top-[40px] md:top-[50px] left-0 right-0 overflow-hidden z-10 border-y border-white/5 py-2 md:py-2.5">
@@ -502,7 +365,7 @@ const Project = () => {
                             key={project.id}
                             project={project}
                             index={idx}
-                            onOpen={openLightbox}
+                            onOpen={openProjectDetails}
                             formatNumber={formatNumber}
                         />
                     ))}
@@ -520,16 +383,6 @@ const Project = () => {
                     ))}
                 </div>
             </div>
-
-            {/* Lightbox */}
-            <Lightbox
-                isOpen={lightboxOpen}
-                currentIndex={currentLightboxIndex}
-                projects={filteredProjects}
-                onClose={closeLightbox}
-                onPrev={prevProject}
-                onNext={nextProject}
-            />
 
             {/* Global Styles for animations and custom CSS */}
             <style jsx>{`
@@ -672,7 +525,7 @@ const Project = () => {
                     }
                 }
             `}</style>
-            <FooterCTA/>
+            {/*<FooterCTA/>*/}
         </div>
     );
 };

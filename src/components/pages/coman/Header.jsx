@@ -6,7 +6,7 @@ const TRAIL_COUNT = 8;
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/#about' },
-    { label: 'Services', href: '/#services' },
+    { label: 'Services', href: '/project-deatils' },
     { label: 'Portfolio', href: '/portfolio' },
     { label: 'Contact', href: '/contact' },
 ];

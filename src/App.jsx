@@ -1,4 +1,5 @@
 import {BrowserRouter, Route, Routes} from "react-router";
+import {useState} from "react";
 import './App.css'
 import HeroSection from "./components/pages/home/HeroSection.jsx";
 import {Layout} from "./components/pages/coman/Layout.jsx";
@@ -16,14 +17,19 @@ import ContactFrom from "./components/pages/contact/ContactFrom.jsx";
 
 function App() {
 
+    const [selectedProject, setSelectedProject] = useState(null);
+
     return (
-            <BrowserRouter>
-                <Layout>
-                    <Routes>
+        <BrowserRouter>
+            <Layout>
+                <Routes>
                     {/*Home Page Section*/}
                     <Route path="/" element={<HeroSection />} />
-                    <Route path="/portfolio" element={<Project />} />
-                    <Route path="/project-deatils" element={<ProjectDetails />} />
+                    <Route path="/portfolio" element={<Project onSelectProject={setSelectedProject} />} />
+                    <Route
+                        path="/project-deatils"
+                        element={<ProjectDetails project={selectedProject} />}
+                    />
                     <Route path="/contact" element={<ContactFrom />} />
                     {/*<Route path="/" element={<AboutSection />} />*/}
                     {/*<Route path="/" element={<ServicesSection />} />*/}
@@ -33,12 +39,10 @@ function App() {
                     {/*<Route path="/" element={<ScrollText />} />*/}
                     {/*    <Route path="/" element={<SkillSection/>} />*/}
 
-
-                    </Routes>
-                </Layout>
-            </BrowserRouter>
+                </Routes>
+            </Layout>
+        </BrowserRouter>
     )
 }
-
 
 export default App

@@ -1,86 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-
-// Gallery images data
-const galleryImages = [
-    {
-        id: 0,
-        src: 'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1488085061387-422e29b40080?w=700&q=80',
-        label: 'Destinations · 01',
-        gridCol: 1,
-        gridRow: 1,
-        className: ''
-    },
-    {
-        id: 1,
-        src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80',
-        label: 'Destinations · 02',
-        gridCol: 2,
-        gridRow: 1,
-        className: ''
-    },
-    {
-        id: 2,
-        src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',
-        label: 'Destinations · 03',
-        gridCol: 3,
-        gridRow: 1,
-        className: ''
-    },
-    {
-        id: 3,
-        src: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=900&q=80',
-        label: 'Destinations · 04',
-        gridCol: 1,
-        gridRow: 2,
-        className: 'md:col-span-2 md:row-span-2'
-    },
-    {
-        id: 4,
-        src: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=700&q=80',
-        label: 'Destinations · 05',
-        gridCol: 2,
-        gridRow: 2,
-        className: ''
-    },
-    {
-        id: 5,
-        src: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=1400&q=90',
-        thumb: 'https://images.unsplash.com/photo-1506929562872-bb421503ef21?w=700&q=80',
-        label: 'Destinations · 06',
-        gridCol: 3,
-        gridRow: 2,
-        className: ''
-    }
-];
-
-// Accordion items data
-const accordionItems = [
-    {
-        title: "Concept for Project",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar. Donec a consectetur nulla. Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam sed aliquam. Sed tempor iaculis massa faucibus feugiat."
-    },
-    {
-        title: "Support and Development",
-        content: "Nulla posuere sapien vitae lectus suscipit, et pulvinar nisi tincidunt. Aliquam erat volutpat. Curabitur convallis fringilla diam sed aliquam. Sed tempor iaculis massa faucibus feugiat. In fermentum facilisis massa, a consequat purus viverra."
-    },
-    {
-        title: "Results and Outcomes",
-        content: "Eu ius postulant salutatus definitionem, explicari graeci viderer. Cu nam tale ferri utroque, eu habemus albucius mel, cu vidit possit ornatus eum. Pri choro pertinax indoctum ne, ad partiendo persecuti forensibus est."
-    }
-];
-
-// Project details rows
-const projectDetails = [
-    { index: "01", key: "Date", value: "26.05.2019", highlight: false },
-    { index: "02", key: "Client", value: "Envato", highlight: false },
-    { index: "03", key: "Category", value: "Design", highlight: false },
-    { index: "04", key: "Online", value: "themeforest.net", highlight: true }
-];
+import { useNavigate } from 'react-router';
 
 // Lightbox Component
 const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => {
@@ -250,7 +169,7 @@ const GalleryItem = ({ image, index, onOpen }) => {
                     transform: isHovered ? 'translate(-50%, -50%) scale(1)' : 'translate(-50%, -50%) scale(0.6)'
                 }}
             >
-                <div className="w-13 h-13 rounded-full border-[1.5px] border-white/80 flex items-center justify-center">
+                <div className="w-12 h-12 bg-black/60 rounded-full border-[1.5px] border-white/80 flex items-center justify-center">
                     <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white stroke-[1.8] fill-none">
                         <circle cx="11" cy="11" r="8" />
                         <line x1="21" y1="21" x2="16.65" y2="16.65" />
@@ -317,7 +236,8 @@ const AccordionItem = ({ item, isOpen, onToggle }) => {
     );
 };
 
-const ProjectDetails = () => {
+const ProjectDetails = ({ project }) => {
+    const navigate = useNavigate();
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentLightboxIndex, setCurrentLightboxIndex] = useState(0);
     const [openAccordionIndex, setOpenAccordionIndex] = useState(0);
@@ -344,6 +264,80 @@ const ProjectDetails = () => {
         setIsMounted(true);
     }, []);
 
+    // Redirect back if no project data (direct URL / refresh)
+    useEffect(() => {
+        if (!project) {
+            navigate('/portfolio');
+        }
+    }, [project, navigate]);
+
+    // Scroll to top on project change
+    useEffect(() => {
+        if (project) window.scrollTo(0, 0);
+    }, [project?.id]);
+
+    // Build gallery images from project data
+    const galleryImages = React.useMemo(() => {
+        if (!project) return [];
+        return [
+            {
+                id: 0,
+                src: project.img,
+                thumb: project.thumb,
+                label: `${project.title} · 01`,
+                // className: 'md:col-span-2 md:row-span-2'
+            },
+            {
+                id: 1,
+                src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=90',
+                thumb: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80',
+                label: `${project.title} · 02`
+            },
+            {
+                id: 2,
+                src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=90',
+                thumb: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',
+                label: `${project.title} · 03`
+            },
+            {
+                id: 3,
+                src: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1400&q=90',
+                thumb: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=900&q=80',
+                label: `${project.title} · 04`
+            },
+            {
+                id: 4,
+                src: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=1400&q=90',
+                thumb: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=700&q=80',
+                label: `${project.title} · 05`
+            }
+        ];
+    }, [project]);
+
+    // Accordion items (dynamic)
+    const accordionItems = React.useMemo(() => [
+        {
+            title: "Concept for Project",
+            content: project?.desc || "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+        },
+        {
+            title: "Support and Development",
+            content: `The ${project?.catLabel || 'project'} scope covered ${project?.scope || 'multiple disciplines'}. We worked closely with ${project?.client || 'the client'} to deliver a cohesive system across every touchpoint.`
+        },
+        {
+            title: "Results and Outcomes",
+            content: `Delivered in ${project?.year || '2024'} with measurable impact. ${project?.meta || 'Recognized across the industry'} — a testament to relentless craft.`
+        }
+    ], [project]);
+
+    // Project detail rows (dynamic)
+    const projectDetails = React.useMemo(() => [
+        { index: "01", key: "Year", value: project?.year || "2024", highlight: false },
+        { index: "02", key: "Client", value: project?.client || "Envato", highlight: false },
+        { index: "03", key: "Category", value: project?.catLabel || "Design", highlight: false },
+        { index: "04", key: "Scope", value: project?.scope || "themeforest.net", highlight: true }
+    ], [project]);
+
     // Scroll reveal observer
     useEffect(() => {
         const observer = new IntersectionObserver(
@@ -369,7 +363,7 @@ const ProjectDetails = () => {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [project]);
 
     // Lightbox handlers
     const openLightbox = (index) => {
@@ -401,18 +395,23 @@ const ProjectDetails = () => {
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [lightboxOpen]);
 
+    const handleBack = () => navigate('/portfolio');
+
+    if (!project) return null;
+
     return (
-        <div className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
+        <div className="bg-[#080809] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
             <div className="fixed inset-0 z-0 pointer-events-none opacity-10 bg-noise" />
 
-            {/* Hero Section */}
+
+
+            {/* Hero Section — original design intact */}
             <section className="relative h-screen min-h-[560px] overflow-hidden flex items-end">
-                {/* Background */}
                 <div className="absolute inset-0">
                     <div
                         className="absolute inset-0 bg-cover bg-center animate-zoom"
                         style={{
-                            backgroundImage: "url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1800&q=85')",
+                            backgroundImage: `url('${project.img}')`,
                             transform: 'scale(1)'
                         }}
                     />
@@ -420,18 +419,26 @@ const ProjectDetails = () => {
                     <div className="absolute inset-0 bg-gradient-to-r from-[rgba(8,8,9,0.5)] to-transparent" />
                 </div>
 
-                {/* Grain overlay */}
+                {/* Back button (fixed — does not affect original layout) */}
+                <button
+                    onClick={handleBack}
+                    className="absolute top-6 left-3 md:left-12 lg:left-14 xl:left-16 z-[200] inline-flex items-center gap-2.5 bg-black/70 backdrop-blur-md border border-white/15 text-white font-barlow-condensed text-[10px] tracking-[3px] font-semibold uppercase py-2.5 px-4 transition-all duration-250 hover:bg-[#F57500] hover:border-[#F57500] hover:text-[#060606] group"
+                >
+                    <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-[2.5] transition-transform duration-250 group-hover:-translate-x-0.5">
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    Back to Work
+                </button>
+
                 <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-noise" />
 
-                {/* Corner decor */}
                 <div className="absolute bottom-[52px] right-[52px] w-[100px] h-[100px] border-r border-white/22 border-b border-white/22 opacity-0 animate-fadeIn [animation-delay:1.8s] pointer-events-none hidden md:block" />
 
-                {/* Index label */}
                 <div className="absolute right-16 top-1/2 -translate-y-1/2 rotate-90 font-barlow-condensed text-[9px] tracking-[8px] uppercase text-white/35 whitespace-nowrap opacity-0 animate-fadeIn [animation-delay:2s] hidden md:block">
-                    Case Study · 01 / 06
+                    Case Study · {String(project.id + 1).padStart(2, '0')} / 08
                 </div>
 
-                {/* Scroll indicator */}
                 <div className="absolute right-12 bottom-[10.5rem] flex flex-col items-center gap-2 opacity-0 animate-fadeIn [animation-delay:2.2s] hidden md:flex">
                     <div className="w-px h-[50px] bg-white relative overflow-hidden">
                         <div className="absolute w-full h-[60%] bg-[#F57500] animate-scrollThumb" />
@@ -447,22 +454,22 @@ const ProjectDetails = () => {
                           Portfolio · Case Study
                         </span>
                     </div>
-                    <h1 className={`font-oswald uppercase text-[clamp(3.9rem,13vw,10.5rem)] leading-[0.87] tracking-[-3px] text-white mb-8 `}>
-                        OUR <span className="inline-block [-webkit-text-stroke:1.8px_#fff] text-transparent skew-x-[-3deg]"> FINEST</span><br /><span className="text-[#F57500]">WORK</span>
+                    <h1 className="font-oswald uppercase text-[clamp(3.2rem,10vw,9rem)] leading-[0.9] tracking-[-2px] text-white mb-8">
+                        {project.title}
                     </h1>
                     <div className="flex items-end justify-between mt-10 pt-2 border-t border-white/10 flex-wrap gap-5">
-                        <p className="font-cormorant italic text-[0.95rem] md:text-[1.12rem] text-white/60 leading-relaxed max-w-full md:max-w-[340px]">
-                            Bold identities that echo across mediums — crafted with <em className="not-italic text-white/80">intent</em>, built for <em className="not-italic text-white/80">distinction</em>.
+                        <p className="font-cormorant italic text-[0.95rem] md:text-[1.12rem] text-white/60 leading-relaxed max-w-full md:max-w-[420px]">
+                            {project.desc}
                         </p>
                         <div className="flex gap-2.5 flex-wrap items-center">
                             <div className="font-barlow-condensed text-[9px] tracking-[3px] uppercase text-[#a8a8b0] py-1.5 px-3 border border-[rgba(255,255,255,0.1)] rounded-[1px] bg-white/4 transition-all duration-250 hover:border-[#F57500] hover:text-[#F57500] hover:bg-[rgba(245,117,0,0.12)]">
-                                Client&ensp;<b className="text-white font-semibold">Envato</b>
+                                Client&ensp;<b className="text-white font-semibold">{project.client}</b>
                             </div>
                             <div className="font-barlow-condensed text-[9px] tracking-[3px] uppercase text-[#a8a8b0] py-1.5 px-3 border border-[rgba(255,255,255,0.1)] rounded-[1px] bg-white/4 transition-all duration-250 hover:border-[#F57500] hover:text-[#F57500] hover:bg-[rgba(245,117,0,0.12)]">
-                                Year&ensp;<b className="text-white font-semibold">2019</b>
+                                Year&ensp;<b className="text-white font-semibold">{project.year}</b>
                             </div>
                             <div className="font-barlow-condensed text-[9px] tracking-[3px] uppercase text-[#a8a8b0] py-1.5 px-3 border border-[rgba(255,255,255,0.1)] rounded-[1px] bg-white/4 transition-all duration-250 hover:border-[#F57500] hover:text-[#F57500] hover:bg-[rgba(245,117,0,0.12)]">
-                                Type&ensp;<b className="text-white font-semibold">Design</b>
+                                Type&ensp;<b className="text-white font-semibold">{project.catLabel}</b>
                             </div>
                         </div>
                     </div>
@@ -479,18 +486,18 @@ const ProjectDetails = () => {
                             isRevealed.secHead ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[38px]'
                         }`}
                     >
-                        <div className="absolute -right-2 top-3 font-oswald text-[clamp(130px,20vw,260px)] font-bold text-[rgba(255,255,255,0.05)] leading-none select-none pointer-events-none hidden md:block writing-vertical rotate-180">
-                            01
+                        <div className="absolute -right-2 top-3 font-oswald text-[clamp(110px,15vw,240px)] font-bold text-[rgba(255,255,255,0.05)] leading-none select-none pointer-events-none hidden md:block writing-vertical rotate-180">
+                            {String(project.id + 1).padStart(2, '0')}
                         </div>
                         <div className="inline-flex items-center gap-2.5 mb-[18px]">
                             <div className="w-1.5 h-1.5 bg-[#F57500] rounded-full flex-shrink-0" />
                             <span className="font-barlow-condensed text-[9px] tracking-[4px] uppercase text-[#646470]">The Brief</span>
                         </div>
                         <h2 className="font-oswald text-[clamp(24px,4vw,38px)] font-semibold text-[#f2f2f0] tracking-[2px] uppercase mb-3">
-                            Kent Brant Concept
+                            {project.title}
                         </h2>
                         <p className="text-[#646470] text-[12px] tracking-[1px] leading-[1.9] uppercase max-w-[540px] font-light">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.
+                            {project.catLabel} · {project.meta}
                         </p>
                         <div className="h-px bg-[rgba(255,255,255,0.05)] my-10 md:my-[52px]" />
                     </div>
@@ -498,11 +505,11 @@ const ProjectDetails = () => {
                     {/* Gallery */}
                     <div
                         ref={sectionRefs.gallery}
-                        className={`grid grid-cols-1 md:grid-cols-2 gap-[3px] mb-[72px] transition-all duration-600 ${
+                        className={`grid grid-cols-1 md:grid-cols-3 gap-[3px] mb-[72px] transition-all duration-600 ${
                             isRevealed.gallery ? 'opacity-100' : 'opacity-0'
                         }`}
                         style={{
-                            gridTemplateRows: 'repeat(2, 235px)' // This creates 3 equal rows
+                            gridTemplateRows: 'repeat(2, 235px)'
                         }}
                     >
                         {galleryImages.map((image, idx) => (
@@ -530,8 +537,8 @@ const ProjectDetails = () => {
                             About This Work
                         </h3>
                         <p className="text-[#a8a8b0] text-sm leading-[2.2] font-light max-w-[800px]">
-                            Vestibulum orci felis, ullamcorper non condimentum non, ultrices ac nunc. Mauris non ligula suscipit, vulputate mi accumsan, dapibus felis. Nullam sed sapien dui. Nulla auctor sit amet sem non porta. Integer iaculis tellus nulla, quis imperdiet magna venenatis vitae. Ut nec hinc dolor possim. An eros argumentum vel, elit diceret duo eu.<br /><br />
-                            Cu nam tale ferri utroque, eu habemus albucius mel, cu vidit possit ornatus eum. Eu ius postulant salutatus definitionem, explicari graeci viderer qui ut, at habeo facer solet usu. Pri choro pertinax indoctum ne, ad partiendo persecuti forensibus est.
+                            {project.desc}<br /><br />
+                            This {project.catLabel.toLowerCase()} engagement spanned {project.scope.toLowerCase()}, delivered for {project.client} in {project.year}. {project.meta}. Cu nam tale ferri utroque, eu habemus albucius mel, cu vidit possit ornatus eum. Eu ius postulant salutatus definitionem, explicari graeci viderer qui ut, at habeo facer solet usu.
                         </p>
                     </div>
 
@@ -604,25 +611,28 @@ const ProjectDetails = () => {
                     {/* CTA Row */}
                     <div
                         ref={sectionRefs.ctaRow}
-                        className={`flex flex-col md:flex-row items-start md:items-center gap-5 mb-24 transition-all duration-850 ${
+                        className={`flex flex-col md:flex-row items-start md:items-center gap-5 mb-24 transition-all duration-850 py-8 ${
                             isRevealed.ctaRow ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[38px]'
                         }`}
                     >
-                        <a href="#" className="inline-flex items-center gap-3.5 bg-[#F57500] text-white font-barlow-condensed text-[11px] tracking-[4px] font-semibold uppercase no-underline h-13 px-8 relative overflow-hidden cursor-pointer rounded-[2px] transition-transform duration-200 hover:scale-97 group">
+                        <a href="#" className=" flex inline-fle x items-center gap-3.5 bg-[#F57500] text-white font-barlow-condensed text-[11px] tracking-[4px] font-semibold uppercase no-underline h-13 px-6 py-3 relative overflow-hidden cursor-pointer rounded-[2px] transition-transform duration-200 hover:scale-97 group">
                             <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-600" />
                             View Project
                             <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-white stroke-[2.2] fill-none">
                                 <line x1="5" y1="12" x2="19" y2="12" /><polyline points="12 5 19 12 12 19" />
                             </svg>
                         </a>
-                        <a href="#" className="inline-flex items-center gap-2.5 bg-transparent text-[#a8a8b0] font-barlow-condensed text-[11px] tracking-[4px] font-semibold uppercase no-underline h-13 px-7 border border-[rgba(255,255,255,0.1)] cursor-pointer rounded-[2px] transition-all duration-250 hover:border-[#F57500] hover:text-[#F57500] hover:bg-[rgba(245,117,0,0.12)] group">
-                            Download Case
+                        <button
+                            onClick={handleBack}
+                            className="inline-flex items-center gap-2.5 bg-transparent text-[#a8a8b0] font-barlow-condensed text-[11px] tracking-[4px] font-semibold uppercase no-underline h-13 px-6 py-3 border border-[rgba(255,255,255,0.1)] cursor-pointer rounded-[2px] transition-all duration-250 hover:border-[#F57500] hover:text-[#F57500] hover:bg-[rgba(245,117,0,0.12)] group"
+                        >
+                            All Projects
                             <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-2 transition-transform duration-250 group-hover:-rotate-45">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                                 <polyline points="7 10 12 15 17 10" />
                                 <line x1="12" y1="15" x2="12" y2="3" />
                             </svg>
-                        </a>
+                        </button>
                     </div>
 
 
@@ -639,7 +649,7 @@ const ProjectDetails = () => {
                 onNext={nextImage}
             />
 
-            {/* Global Styles */}
+            {/* Global Styles — original preserved */}
             <style jsx>{`
 
                 @import url('https://fonts.googleapis.com/css2?family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Oswald:wght@500;700&family=Roboto:wght@500&display=swap');
@@ -648,59 +658,60 @@ const ProjectDetails = () => {
                 .font-oswald {
                     font-family: 'Oswald', sans-serif;
                 }
-                
-        @keyframes fadeIn {
-          to { opacity: 1; }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 1s ease forwards;
-        }
-        @keyframes slideUp {
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-slideUp {
-          animation: slideUp 1.1s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        @keyframes scrollThumb {
-          0% { top: -60%; }
-          100% { top: 160%; }
-        }
-        .animate-scrollThumb {
-          animation: scrollThumb 2s 2.5s ease-in-out infinite;
-        }
-        .writing-vertical {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
-        }
-        .rotate-180 {
-          transform: rotate(180deg);
-        }
-        .bg-noise {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-        @media (max-width: 960px) {
-          .gallery {
-            grid-template-rows: repeat(4, 200px);
-          }
-        }
-        @media (max-width: 640px) {
-          .gallery {
-            grid-template-rows: none;
-          }
-        }
-        .hover\\:scale-97:hover {
-          transform: scale(0.97);
-        }
-        .hover\\:scale-108:hover {
-          transform: scale(1.08) translateY(-50%);
-        }
-        .group\\:hover\\:translate-x-full {
-          transform: translateX(100%);
-        }
-      `}</style>
+
+                @keyframes fadeIn {
+                    to { opacity: 1; }
+                }
+                .animate-fadeIn {
+                    animation: fadeIn 1s ease forwards;
+                }
+                @keyframes slideUp {
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                .animate-slideUp {
+                    animation: slideUp 1.1s 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+                }
+                @keyframes scrollThumb {
+                    0% { top: -60%; }
+                    100% { top: 160%; }
+                }
+                .animate-scrollThumb {
+                    animation: scrollThumb 2s 2.5s ease-in-out infinite;
+                }
+                .writing-vertical {
+                    writing-mode: vertical-rl;
+                    text-orientation: mixed;
+                }
+                .rotate-180 {
+                    transform: rotate(180deg);
+                }
+                .bg-noise {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+                }
+                @keyframes zoomIn { from { transform: scale(1.15); } to { transform: scale(1); } }
+                .animate-zoom { animation: zoomIn 12s ease-out forwards; }
+                @media (max-width: 960px) {
+                    .gallery {
+                        grid-template-rows: repeat(4, 200px);
+                    }
+                }
+                @media (max-width: 640px) {
+                    .gallery {
+                        grid-template-rows: none;
+                    }
+                }
+                .hover\\:scale-97:hover {
+                    transform: scale(0.97);
+                }
+                .hover\\:scale-108:hover {
+                    transform: scale(1.08) translateY(-50%);
+                }
+                .group\\:hover\\:translate-x-full {
+                    transform: translateX(100%);
+                }
+            `}</style>
         </div>
     );
 };
-
 
 export default ProjectDetails;
