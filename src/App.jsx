@@ -15,7 +15,8 @@ import Project from "./components/pages/project/Project.jsx";
 import ProjectDetails from "./components/pages/projectdeatils/ProjectDetails.jsx";
 import ContactFrom from "./components/pages/contact/ContactFrom.jsx";
 import FooterCTA from "./components/pages/project/FooterCTA.jsx";
-import Services from "./components/pages/service/service.jsx";
+import Services from "./components/pages/service/Service.jsx";
+import Certificates from "./components/pages/certificates/Certificates.jsx";
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
                     />
                     <Route path="/contact" element={<ContactFrom />} />
                     <Route path="/service" element={<Services />} />
+                    <Route path="/certificates" element={<Certificates/>} />
                     {/*<Route path="/" element={<AboutSection />} />*/}
                     {/*<Route path="/" element={<ServicesSection />} />*/}
                     {/*<Route path="/" element={<FactsSection />} />*/}
