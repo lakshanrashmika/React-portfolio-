@@ -14,6 +14,8 @@ import SkillSection from "./components/pages/home/SkillSection.jsx";
 import Project from "./components/pages/project/Project.jsx";
 import ProjectDetails from "./components/pages/projectdeatils/ProjectDetails.jsx";
 import ContactFrom from "./components/pages/contact/ContactFrom.jsx";
+import FooterCTA from "./components/pages/project/FooterCTA.jsx";
+import Services from "./components/pages/service/service.jsx";
 
 function App() {
 
@@ -31,6 +33,7 @@ function App() {
                         element={<ProjectDetails project={selectedProject} />}
                     />
                     <Route path="/contact" element={<ContactFrom />} />
+                    <Route path="/service" element={<Services />} />
                     {/*<Route path="/" element={<AboutSection />} />*/}
                     {/*<Route path="/" element={<ServicesSection />} />*/}
                     {/*<Route path="/" element={<FactsSection />} />*/}

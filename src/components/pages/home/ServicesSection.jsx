@@ -312,73 +312,73 @@ const ServicesSection = () => {
             <div className="column-wrap float-left w-[calc(70%-93px)] relative h-full bg-white z-10 xl:w-full">
                 <div className="column-wrap-container py-16 md:py-12">
                     <div className="col-wc_dec absolute left-0 w-7/10 h-full bg-gray-50 top-0 z-10"></div>
-                    <section className="py-16 md:py-20 bg-white relative overflow-hidden">
-                        <div className="container max-w-8xl w-11/12 mx-auto relative z-50">
-                            <div className="container mx-auto px-0 max-w-8xl">
-                                {/* Section Title */}
-                                <div className="section-title mb-10 pb-5 relative">
-                                    <div className="absolute left-0 -top-10 h-0.5 w-8 bg-orange-500"></div>
-                                    <div className="absolute left-0 -bottom-2.5 h-px w-11/12 bg-gray-200"></div>
-                                    <div>
-                                        <p className="text-[11px] tracking-[4px] uppercase text-[#F57500] font-medium mb-2.5">What Can I Do</p>
-                                        <h2 className="font-syne font-extrabold text-[clamp(44px,7vw,72px)] leading-[0.95] text-[#313131]">
-                                            MY<br/> <span className="text-[#F57500]">EXPERTISE</span>
-                                        </h2>
-                                    </div>
-                                </div>
+                    {/*<section className="py-16 md:py-20 bg-white relative overflow-hidden">*/}
+                    {/*    <div className="container max-w-8xl w-11/12 mx-auto relative z-50">*/}
+                    {/*        <div className="container mx-auto px-0 max-w-8xl">*/}
+                    {/*            /!* Section Title *!/*/}
+                    {/*            <div className="section-title mb-10 pb-5 relative">*/}
+                    {/*                <div className="absolute left-0 -top-10 h-0.5 w-8 bg-orange-500"></div>*/}
+                    {/*                <div className="absolute left-0 -bottom-2.5 h-px w-11/12 bg-gray-200"></div>*/}
+                    {/*                <div>*/}
+                    {/*                    <p className="text-[11px] tracking-[4px] uppercase text-[#F57500] font-medium mb-2.5">What Can I Do</p>*/}
+                    {/*                    <h2 className="font-syne font-extrabold text-[clamp(44px,7vw,72px)] leading-[0.95] text-[#313131]">*/}
+                    {/*                        MY<br/> <span className="text-[#F57500]">EXPERTISE</span>*/}
+                    {/*                    </h2>*/}
+                    {/*                </div>*/}
+                    {/*            </div>*/}
 
-                                {/* Background noise overlay */}
-                                <div className="fixed inset-0 pointer-events-none z-10 opacity-30 bg-noise" />
+                    {/*            /!* Background noise overlay *!/*/}
+                    {/*            <div className="fixed inset-0 pointer-events-none z-10 opacity-30 bg-noise" />*/}
 
-                                {/* Floating Card - only on non-touch, > 768px */}
-                                {!isTouchDevice && <FloatingCard item={hoveredItem} mousePos={mousePos} />}
+                    {/*            /!* Floating Card - only on non-touch, > 768px *!/*/}
+                    {/*            {!isTouchDevice && <FloatingCard item={hoveredItem} mousePos={mousePos} />}*/}
 
-                                {/*<section className="min-h-screen bg-[#f5f2ee] font-instrument text-[#313131] relative z-0">*/}
-                                    <div className="min-h-[620px] relative overflow-hidden py-10 px-4 sm:px-6 lg:px-8 xl:px-5
-                                     ">
+                    {/*            /!*<section className="min-h-screen bg-[#f5f2ee] font-instrument text-[#313131] relative z-0">*!/*/}
+                    {/*                <div className="min-h-[620px] relative overflow-hidden py-10 px-4 sm:px-6 lg:px-8 xl:px-5*/}
+                    {/*                 ">*/}
 
-                                        {/* Services List */}
-                                        <ul className="list-none">
-                                            {servicesData.map((service, idx) => (
-                                                <ServiceItem
-                                                    key={service.id}
-                                                    service={service}
-                                                    isOpen={openId === service.id}
-                                                    onToggle={() => handleToggle(service.id)}
-                                                    onMouseEnter={() => !isTouchDevice && setHoveredItem(service)}
-                                                    onMouseLeave={() => !isTouchDevice && setHoveredItem(null)}
-                                                />
-                                            ))}
-                                        </ul>
+                    {/*                    /!* Services List *!/*/}
+                    {/*                    <ul className="list-none">*/}
+                    {/*                        {servicesData.map((service, idx) => (*/}
+                    {/*                            <ServiceItem*/}
+                    {/*                                key={service.id}*/}
+                    {/*                                service={service}*/}
+                    {/*                                isOpen={openId === service.id}*/}
+                    {/*                                onToggle={() => handleToggle(service.id)}*/}
+                    {/*                                onMouseEnter={() => !isTouchDevice && setHoveredItem(service)}*/}
+                    {/*                                onMouseLeave={() => !isTouchDevice && setHoveredItem(null)}*/}
+                    {/*                            />*/}
+                    {/*                        ))}*/}
+                    {/*                    </ul>*/}
 
-                                        {/* Bottom CTA */}
-                                        <div className="mt-16 md:mt-20 opacity-0 animate-fadeIn animation-delay-300">
-                                            <div className="bg-[#313131] p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">
-                                                <p className="font-syne font-bold text-[clamp(16px,4vw,18px)] text-white leading-tight max-w-[240px]">
-                                                    Let's build something <span className="text-[#F57500]">remarkable.</span>
-                                                </p>
-                                                <Link
-                                                    to="/contact"
-                                                    className="flex-shrink-0"
-                                                >
-                                                    <button className="relative bg-[#F57500] text-white px-8 py-3.5 font-syne text-xs font-bold tracking-[2px] uppercase overflow-hidden transition-colors duration-300 hover:text-[#F57500] group">
-                                                        <span className="relative z-10">Get In Touch</span>
+                    {/*                    /!* Bottom CTA *!/*/}
+                    {/*                    <div className="mt-16 md:mt-20 opacity-0 animate-fadeIn animation-delay-300">*/}
+                    {/*                        <div className="bg-[#313131] p-8 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6 w-full">*/}
+                    {/*                            <p className="font-syne font-bold text-[clamp(16px,4vw,18px)] text-white leading-tight max-w-[240px]">*/}
+                    {/*                                Let's build something <span className="text-[#F57500]">remarkable.</span>*/}
+                    {/*                            </p>*/}
+                    {/*                            <Link*/}
+                    {/*                                to="/contact"*/}
+                    {/*                                className="flex-shrink-0"*/}
+                    {/*                            >*/}
+                    {/*                                <button className="relative bg-[#F57500] text-white px-8 py-3.5 font-syne text-xs font-bold tracking-[2px] uppercase overflow-hidden transition-colors duration-300 hover:text-[#F57500] group">*/}
+                    {/*                                    <span className="relative z-10">Get In Touch</span>*/}
 
-                                                        <span className="absolute inset-0 bg-white translate-y-full transition-transform duration-300 group-hover:translate-y-0" />
-                                                    </button>
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {/*</section>*/}
-                            </div>
-                        </div>
+                    {/*                                    <span className="absolute inset-0 bg-white translate-y-full transition-transform duration-300 group-hover:translate-y-0" />*/}
+                    {/*                                </button>*/}
+                    {/*                            </Link>*/}
+                    {/*                        </div>*/}
+                    {/*                    </div>*/}
+                    {/*                </div>*/}
+                    {/*            /!*</section>*!/*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
 
-                        {/* Section Number */}
-                        <div className="section-number absolute right-2.5 top-[-2rem] text-[224px] font-bold text-gray-200 opacity-70 font-['Oswald'] -rotate-90 md:text-[180px]">
-                            <span className="relative overflow-hidden">0</span>2.
-                        </div>
-                    </section>
+                    {/*    /!* Section Number *!/*/}
+                    {/*    <div className="section-number absolute right-2.5 top-[-2rem] text-[224px] font-bold text-gray-200 opacity-70 font-['Oswald'] -rotate-90 md:text-[180px]">*/}
+                    {/*        <span className="relative overflow-hidden">0</span>2.*/}
+                    {/*    </div>*/}
+                    {/*</section>*/}
 
                     {/* Section Separator */}
                     <div className="section-separator float-left w-full h-px relative mb-5">

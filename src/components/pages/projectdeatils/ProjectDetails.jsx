@@ -236,11 +236,75 @@ const AccordionItem = ({ item, isOpen, onToggle }) => {
     );
 };
 
+// ─── PER‑PROJECT GALLERY IMAGE SETS ──────────────────────────────────────────
+// Each project ID maps to an array of exactly 5 images with custom labels.
+// The first image always uses the project's own `img` and `thumb` so the
+// gallery respects the project's hero image, while the following four are
+// unique to the project.
+const PROJECT_GALLERY_MAP = {
+    0: [
+        { id: 0, label: 'Travel Agency · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80', label: 'Travel Agency · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80', label: 'Travel Agency · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=900&q=80', label: 'Travel Agency · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=700&q=80', label: 'Travel Agency · 05' },
+    ],
+    1: [
+        { id: 0, label: 'Trail Tribe · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=700&q=80', label: 'Trail Tribe · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1501555088652-021faa106b9b?w=700&q=80', label: 'Trail Tribe · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=900&q=80', label: 'Trail Tribe · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?w=700&q=80', label: 'Trail Tribe · 05' },
+    ],
+    2: [
+        { id: 0, label: 'Wild Horizons · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?w=700&q=80', label: 'Wild Horizons · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80', label: 'Wild Horizons · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=900&q=80', label: 'Wild Horizons · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=700&q=80', label: 'Wild Horizons · 05' },
+    ],
+    3: [
+        { id: 0, label: 'Apex Gear · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=80', label: 'Apex Gear · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1556906781-9a412961c28c?w=700&q=80', label: 'Apex Gear · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=900&q=80', label: 'Apex Gear · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&q=80', label: 'Apex Gear · 05' },
+    ],
+    4: [
+        { id: 0, label: 'Solara Collective · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=700&q=80', label: 'Solara Collective · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=700&q=80', label: 'Solara Collective · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=900&q=80', label: 'Solara Collective · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1445205170230-053b83016050?w=700&q=80', label: 'Solara Collective · 05' },
+    ],
+    5: [
+        { id: 0, label: 'Nexa Studio · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1558021212-51b6ecfa0db9?w=700&q=80', label: 'Nexa Studio · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1522542550221-31fd19575a2d?w=700&q=80', label: 'Nexa Studio · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1558655146-9f40138edfeb?w=900&q=80', label: 'Nexa Studio · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1547658719-da2b51169166?w=700&q=80', label: 'Nexa Studio · 05' },
+    ],
+    6: [
+        { id: 0, label: 'Terra Motion · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=700&q=80', label: 'Terra Motion · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=700&q=80', label: 'Terra Motion · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=900&q=80', label: 'Terra Motion · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=700&q=80', label: 'Terra Motion · 05' },
+    ],
+    7: [
+        { id: 0, label: 'Volta Systems · 01' },
+        { id: 1, src: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=700&q=80', label: 'Volta Systems · 02' },
+        { id: 2, src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80', label: 'Volta Systems · 03' },
+        { id: 3, src: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80', label: 'Volta Systems · 04' },
+        { id: 4, src: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=1400&q=90', thumb: 'https://images.unsplash.com/photo-1553877522-43269d4ea984?w=700&q=80', label: 'Volta Systems · 05' },
+    ],
+};
+
 const ProjectDetails = ({ project }) => {
     const navigate = useNavigate();
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [currentLightboxIndex, setCurrentLightboxIndex] = useState(0);
-    const [openAccordionIndex, setOpenAccordionIndex] = useState(0);
+    // const [openAccordionIndex, setOpenAccordionIndex] = useState(0);
     const [isRevealed, setIsRevealed] = useState({
         secHead: false,
         gallery: false,
@@ -276,59 +340,27 @@ const ProjectDetails = ({ project }) => {
         if (project) window.scrollTo(0, 0);
     }, [project?.id]);
 
-    // Build gallery images from project data
+    // ─── BUILD GALLERY IMAGES PER PROJECT ─────────────────────────────────────
     const galleryImages = React.useMemo(() => {
         if (!project) return [];
-        return [
-            {
-                id: 0,
-                src: project.img,
-                thumb: project.thumb,
-                label: `${project.title} · 01`,
-                // className: 'md:col-span-2 md:row-span-2'
-            },
-            {
-                id: 1,
-                src: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1400&q=90',
-                thumb: 'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=700&q=80',
-                label: `${project.title} · 02`
-            },
-            {
-                id: 2,
-                src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1400&q=90',
-                thumb: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80',
-                label: `${project.title} · 03`
-            },
-            {
-                id: 3,
-                src: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=1400&q=90',
-                thumb: 'https://images.unsplash.com/photo-1530789253388-582c481c54b0?w=900&q=80',
-                label: `${project.title} · 04`
-            },
-            {
-                id: 4,
-                src: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=1400&q=90',
-                thumb: 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?w=700&q=80',
-                label: `${project.title} · 05`
-            }
-        ];
-    }, [project]);
 
-    // Accordion items (dynamic)
-    const accordionItems = React.useMemo(() => [
-        {
-            title: "Concept for Project",
-            content: project?.desc || "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-        },
-        {
-            title: "Support and Development",
-            content: `The ${project?.catLabel || 'project'} scope covered ${project?.scope || 'multiple disciplines'}. We worked closely with ${project?.client || 'the client'} to deliver a cohesive system across every touchpoint.`
-        },
-        {
-            title: "Results and Outcomes",
-            content: `Delivered in ${project?.year || '2024'} with measurable impact. ${project?.meta || 'Recognized across the industry'} — a testament to relentless craft.`
-        }
-    ], [project]);
+        // Get the per‑project template (fallback to project 0 if missing)
+        const template = PROJECT_GALLERY_MAP[project.id] || PROJECT_GALLERY_MAP[0];
+
+        return template.map((item, idx) => {
+            // First item: use the project's own hero image/thumb
+            if (idx === 0) {
+                return {
+                    id: item.id,
+                    src: project.img,
+                    thumb: project.thumb,
+                    label: item.label,
+                };
+            }
+            // All other items use the mapped src/thumb
+            return item;
+        });
+    }, [project]);
 
     // Project detail rows (dynamic)
     const projectDetails = React.useMemo(() => [
@@ -502,7 +534,7 @@ const ProjectDetails = ({ project }) => {
                         <div className="h-px bg-[rgba(255,255,255,0.05)] my-10 md:my-[52px]" />
                     </div>
 
-                    {/* Gallery */}
+                    {/* Gallery — now displays the per‑project 5 images */}
                     <div
                         ref={sectionRefs.gallery}
                         className={`grid grid-cols-1 md:grid-cols-3 gap-[3px] mb-[72px] transition-all duration-600 ${
@@ -537,38 +569,9 @@ const ProjectDetails = ({ project }) => {
                             About This Work
                         </h3>
                         <p className="text-[#a8a8b0] text-sm leading-[2.2] font-light max-w-[800px]">
-                            {project.desc}<br /><br />
-                            This {project.catLabel.toLowerCase()} engagement spanned {project.scope.toLowerCase()}, delivered for {project.client} in {project.year}. {project.meta}. Cu nam tale ferri utroque, eu habemus albucius mel, cu vidit possit ornatus eum. Eu ius postulant salutatus definitionem, explicari graeci viderer qui ut, at habeo facer solet usu.
+                            {project.desc}<br />
+                            {project.desc2}
                         </p>
-                    </div>
-
-                    {/* Process Section */}
-                    <div className="pt-0">
-                        <div className="inline-flex items-center gap-2.5 mb-[18px]">
-                            <div className="w-1.5 h-1.5 bg-[#F57500] rounded-full flex-shrink-0" />
-                            <span className="font-barlow-condensed text-[9px] tracking-[4px] uppercase text-[#646470]">Process</span>
-                        </div>
-                        <h2 className="font-oswald text-[clamp(24px,4vw,38px)] font-semibold text-[#f2f2f0] tracking-[2px] uppercase mb-3">
-                            The Brief
-                        </h2>
-                        <div className="h-px bg-[rgba(255,255,255,0.05)] mt-[30px] mb-[52px]" />
-                    </div>
-
-                    {/* Accordion */}
-                    <div
-                        ref={sectionRefs.accordion}
-                        className={`mb-[72px] transition-all duration-850 ${
-                            isRevealed.accordion ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-[38px]'
-                        }`}
-                    >
-                        {accordionItems.map((item, idx) => (
-                            <AccordionItem
-                                key={idx}
-                                item={item}
-                                isOpen={openAccordionIndex === idx}
-                                onToggle={() => setOpenAccordionIndex(openAccordionIndex === idx ? -1 : idx)}
-                            />
-                        ))}
                     </div>
 
                     {/* Project Details Block */}
