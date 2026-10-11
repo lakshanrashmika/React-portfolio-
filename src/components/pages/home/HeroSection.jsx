@@ -127,9 +127,9 @@ const HeroSection = () => {
     const circleAttrs = getCircleAttributes();
 
     return (
-        <div className="z-20">
+        <div id="/home" className="z-20">
 
-        <div className="min-h-[92.5vh] bg-[#292929] text-white font-sans overflow-hidden relative">
+        <div  className="min-h-[92.5vh] bg-[#292929] text-white font-sans overflow-hidden relative">
 
             {/* Main Content */}
             <div className="relative min-h-[80vh]">

@@ -281,7 +281,7 @@ const Project = ({ onSelectProject }) => {
     };
 
     return (
-        <div className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
+        <div id="portfolio" className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
 
             {/* Hero Section */}
             <div className="relative min-h-[80vh] md:min-h-screen flex flex-col justify-end overflow-hidden px-5 md:px-[4.5rem] pb-12 md:pb-[72px]">

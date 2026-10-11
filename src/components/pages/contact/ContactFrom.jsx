@@ -97,7 +97,7 @@ const ContactFrom = () => {
     };
 
     return (
-        <div className="bg-white text-[#313131] font-['Manrope',sans-serif] ">
+        <div id="contact" className="bg-white text-[#313131] font-['Manrope',sans-serif] ">
             {/* Hero Section */}
             <section className="hero min-h-screen relative overflow-hidden bg-white">
                 <section className="relative h-screen min-h-[560px] overflow-hidden flex items-end">

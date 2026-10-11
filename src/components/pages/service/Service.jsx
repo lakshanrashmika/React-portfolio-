@@ -487,7 +487,7 @@ const Services = () => {
     const formatNumber = (num) => num.toString().padStart(2, '0');
 
     return (
-        <div className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
+        <div id="service" className="bg-[#060606] min-h-screen overflow-x-hidden font-syne font-barlow text-[#f2f2f0]">
 
             {/* ─── FLOATING IMAGE CARD ─────────────────────────────────────── */}
             {!isTouchDevice && <FloatingCard item={hoveredItem} mousePos={mousePos} />}

@@ -6,7 +6,7 @@ const TRAIL_COUNT = 8;
 const navItems = [
     { label: 'Home', href: '/' },
     { label: 'Certificates', href: '/certificates', hasDropdown: true },
-    { label: 'Services', href: '/service' },
+    { label: 'Service', href: '/service' },
     { label: 'Portfolio', href: '/portfolio' },
     { label: 'Contact', href: '/contact' },
 ];
@@ -89,27 +89,35 @@ export default function Header() {
     }, [isOpen]);
 
     // ============================================================
-    // ACTIVE NAVIGATION
+    // ACTIVE NAVIGATION (scroll spy with IntersectionObserver)
     // ============================================================
     useEffect(() => {
-        const ids = navItems
-            .map((n) => document.getElementById(n.label.toLowerCase()))
+        const sectionIds = ['/', 'certificates', 'service', 'portfolio', 'contact'];
+
+        const elements = sectionIds
+            .map((id) => document.getElementById(id))
             .filter(Boolean);
 
-        if (!ids.length) return;
+        if (!elements.length) return;
 
         const obs = new IntersectionObserver(
             (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        setActive(entry.target.id);
-                    }
-                });
+                // Pick the most visible entry
+                const visible = entries
+                    .filter((e) => e.isIntersecting)
+                    .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+                if (visible.length > 0) {
+                    setActive(visible[0].target.id);
+                }
             },
-            { threshold: 0.4 }
+            {
+                threshold: [0.15, 0.3, 0.5, 0.7],
+                rootMargin: '-68px 0px -30% 0px',
+            }
         );
 
-        ids.forEach((el) => obs.observe(el));
+        elements.forEach((el) => obs.observe(el));
         return () => obs.disconnect();
     }, []);
 
@@ -259,10 +267,7 @@ export default function Header() {
     // Close desktop dropdown on outside click
     useEffect(() => {
         const handleClickOutside = (e) => {
-            if (
-                desktopDropdownOpen &&
-                !e.target.closest('.nav-dropdown')
-            ) {
+            if (desktopDropdownOpen && !e.target.closest('.nav-dropdown')) {
                 setDesktopDropdownOpen(false);
             }
         };
@@ -1032,7 +1037,7 @@ export default function Header() {
                 <div className="hdr-bar">
                     <div className="hdr-inner">
                         {/* LOGO */}
-                        <a href="/#home" className="logo">
+                        <a href="/" className="logo">
                             <div className="logo-text">
                                 <span className="logo-name">Lakshan</span>
                                 <span className="logo-tag">Developer</span>
@@ -1138,7 +1143,7 @@ export default function Header() {
 
                         {/* Home */}
                         <a
-                            href="/"
+                            href="/home"
                             className={`mob-nav-item ${
                                 active === 'home' ? 'active' : ''
                             }`}
@@ -1191,20 +1196,20 @@ export default function Header() {
                         <a
                             href="/service"
                             className={`mob-nav-item ${
-                                active === 'services' ? 'active' : ''
+                                active === 'service' ? 'active' : ''
                             }`}
-                            onClick={() => handleMobileNavClick('Services')}
+                            onClick={() => handleMobileNavClick('Service')}
                         >
                             <div className="mob-nav-left">
                                 <span className="mob-nav-num">03</span>
-                                <span className="mob-nav-label">Services</span>
+                                <span className="mob-nav-label">Service</span>
                             </div>
                             <span className="mob-nav-arrow">→</span>
                         </a>
 
                         {/* Portfolio */}
                         <a
-                            href="/portfolio"
+                            href="/#portfolio"
                             className={`mob-nav-item ${
                                 active === 'portfolio' ? 'active' : ''
                             }`}
@@ -1219,7 +1224,7 @@ export default function Header() {
 
                         {/* Contact */}
                         <a
-                            href="/contact"
+                            href="/#contact"
                             className={`mob-nav-item ${
                                 active === 'contact' ? 'active' : ''
                             }`}
