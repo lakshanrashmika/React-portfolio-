@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';   // ← FIX 1: was 'react-router'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // HELPER
 // ─────────────────────────────────────────────────────────────────────────────
-const padNumber = (num) => String(num).padStart(2, '0');
+// const padNumber = (num) => String(num).padStart(2, '0');
 
 // Marquee items
 const marqueeItems = [
@@ -19,7 +19,7 @@ const marqueeItems = [
 ];
 
 // Ticker items
-const tickerItems = ["DESIGN", "BUILD", "LEAD", "DELIVER"];
+// const tickerItems = ["DESIGN", "BUILD", "LEAD", "DELIVER"];
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CERTIFICATE DATA
@@ -99,9 +99,8 @@ const SearchIcon = () => (
 // ─────────────────────────────────────────────────────────────────────────────
 // LIGHTBOX COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
-const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => {
+const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext, onSelect }) => {
     const [imageLoaded, setImageLoaded] = useState(false);
-    const [transitionDirection, setTransitionDirection] = useState(0);
     const currentImage = images[currentIndex];
 
     useEffect(() => {
@@ -110,14 +109,12 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
         }
     }, [currentIndex, isOpen, currentImage]);
 
-    // ─── SCROLL LOCK (FIXED) ────────────────────────────────────────────────
+    // ─── SCROLL LOCK ────────────────────────────────────────────────────────
     useEffect(() => {
         if (isOpen) {
-            // Save current scroll position
             const scrollY = window.scrollY;
             const scrollX = window.scrollX;
 
-            // Lock scroll on both html and body
             document.documentElement.style.overflow = 'hidden';
             document.body.style.overflow = 'hidden';
             document.body.style.position = 'fixed';
@@ -125,17 +122,14 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
             document.body.style.left = `-${scrollX}px`;
             document.body.style.width = '100%';
 
-            // Extra safety: prevent wheel + touchmove from scrolling background
             const preventScroll = (e) => e.preventDefault();
             window.addEventListener('wheel', preventScroll, { passive: false });
             window.addEventListener('touchmove', preventScroll, { passive: false });
 
             return () => {
-                // Remove listeners
                 window.removeEventListener('wheel', preventScroll);
                 window.removeEventListener('touchmove', preventScroll);
 
-                // Restore styles
                 document.documentElement.style.overflow = '';
                 document.body.style.overflow = '';
                 document.body.style.position = '';
@@ -143,43 +137,23 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
                 document.body.style.left = '';
                 document.body.style.width = '';
 
-                // Restore the previous scroll position
                 window.scrollTo(scrollX, scrollY);
             };
         }
     }, [isOpen]);
-    // ────────────────────────────────────────────────────────────────────────
 
     if (!isOpen || !currentImage) return null;
 
-    const handlePrev = () => {
-        setTransitionDirection(-1);
-        onPrev();
-    };
-
-    const handleNext = () => {
-        setTransitionDirection(1);
-        onNext();
-    };
-
-    const handleImageLoad = () => {
-        setImageLoaded(true);
-    };
-
-    const padNumberLocal = (n) => String(n + 1).padStart(2, '0');
+    const padNumberLocal = (n) => String(n).padStart(2, '0');
 
     return (
         <div
-            className={`fixed inset-0 z-[9999] flex items-center justify-center transition-all duration-400 ${
-                isOpen ? 'bg-[rgba(4,4,5,0.95)] pointer-events-auto' : 'bg-transparent pointer-events-none'
-            }`}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-[rgba(4,4,5,0.95)]"
             onClick={(e) => {
                 if (e.target === e.currentTarget) onClose();
             }}
         >
-            <div className={`relative transition-all duration-400 ${
-                isOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-85 translate-y-7'
-            }`}>
+            <div className="relative">
                 {/* Close button */}
                 <button
                     className="absolute -top-10 -right-10 w-10 h-10 rounded-full bg-[#F57500] border-none flex items-center justify-center transition-transform duration-250 hover:scale-110 hover:rotate-90 z-10"
@@ -193,7 +167,7 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
                 {/* Prev arrow */}
                 <button
                     className="absolute top-1/2 -left-[68px] -translate-y-1/2 w-12 h-12 rounded-full bg-white/7 border border-white/15 flex items-center justify-center backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(245,117,0,0.25)] hover:border-[#F57500] hover:scale-108 z-10"
-                    onClick={handlePrev}
+                    onClick={onPrev}
                 >
                     <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white stroke-2 fill-none">
                         <polyline points="15 18 9 12 15 6" />
@@ -202,21 +176,18 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
 
                 {/* Image */}
                 <img
+                    key={currentIndex}
                     src={currentImage.image}
                     alt={`Gallery ${currentIndex + 1}`}
-                    className="max-w-[88vw] max-h-[80vh] object-contain rounded-[1px] transition-all duration-300"
-                    style={{
-                        opacity: imageLoaded ? 1 : 0,
-                        transform: `translateX(${transitionDirection * 2}px)`,
-                        transition: 'opacity 0.3s, transform 0.3s'
-                    }}
-                    onLoad={handleImageLoad}
+                    className="max-w-[88vw] max-h-[80vh] object-contain rounded-[1px] transition-opacity duration-300"
+                    style={{ opacity: imageLoaded ? 1 : 0 }}
+                    onLoad={() => setImageLoaded(true)}
                 />
 
                 {/* Next arrow */}
                 <button
                     className="absolute top-1/2 -right-[68px] -translate-y-1/2 w-12 h-12 rounded-full bg-white/7 border border-white/15 flex items-center justify-center backdrop-blur-sm transition-all duration-200 hover:bg-[rgba(245,117,0,0.25)] hover:border-[#F57500] hover:scale-108 z-10"
-                    onClick={handleNext}
+                    onClick={onNext}
                 >
                     <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white stroke-2 fill-none">
                         <polyline points="9 18 15 12 9 6" />
@@ -226,7 +197,7 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
                 {/* Info footer */}
                 <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 whitespace-nowrap flex items-center gap-4">
                     <span className="font-barlow-condensed text-[11px] tracking-[4px] text-white/40 uppercase">
-                        {padNumberLocal(currentIndex)} / {padNumberLocal(images.length - 1)}
+                        {padNumberLocal(currentIndex + 1)} / {padNumberLocal(images.length)}
                     </span>
                     <div className="flex gap-1.5 items-center">
                         {images.map((_, idx) => (
@@ -237,14 +208,195 @@ const Lightbox = ({ isOpen, currentIndex, images, onClose, onPrev, onNext }) => 
                                         ? 'bg-[#F57500] w-4 h-1 rounded-[2px]'
                                         : 'bg-white/20 w-1 h-1 rounded-full'
                                 }`}
-                                onClick={() => {
-                                    if (idx < currentIndex) onPrev(currentIndex - idx);
-                                    else if (idx > currentIndex) onNext(idx - currentIndex);
-                                }}
+                                onClick={() => onSelect(idx)}
                             />
                         ))}
                     </div>
                 </div>
+            </div>
+        </div>
+    );
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EDUCATION / ABOUT IJSE SECTION
+// ─────────────────────────────────────────────────────────────────────────────
+const EducationSection = () => {
+    const navigate = useNavigate();   // ← FIX 2: was missing
+
+    return (
+        <div className="relative bg-[#f7f7f7] text-[#222] py-24 px-5 md:px-[4.5rem] overflow-hidden font-mukta">
+
+            {/* Huge Background Text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none overflow-hidden w-full text-center">
+                <span className="font-anton text-[22vw] leading-none text-black/[0.045] uppercase tracking-tighter whitespace-nowrap">
+                    EDUCATION
+                </span>
+            </div>
+
+            {/* Background subtle vertical grid lines */}
+            <div className="absolute inset-0 flex justify-between px-20 pointer-events-none opacity-[0.04]">
+                <div className="w-px h-full bg-black"></div>
+                <div className="w-px h-full bg-black"></div>
+                <div className="w-px h-full bg-black"></div>
+                <div className="w-px h-full bg-black"></div>
+            </div>
+
+            <div className="max-w-[1200px] mx-auto relative z-10">
+
+                <div className="flex flex-col lg:flex-row  mb-16">
+
+                    {/* Left Column: Diploma Info */}
+                    <div className="lg:w-1/3 relative pt-2">
+
+                        <div className="pl-8 relative">
+                            <div className="absolute left-0 top-0 bottom-0 w-[4px] bg-[#F57500]" />
+
+                            <div className="absolute -top-12 -left-6 flex gap-1.5 opacity-[0.18] pointer-events-none">
+                                <div className="w-9 h-36 bg-[#F57500] skew-x-[-25deg]" />
+                                <div className="w-9 h-36 bg-[#F57500] skew-x-[-25deg]" />
+                            </div>
+
+                            <h2 className="font-roboto font-bold text-[1.75rem] leading-[1.15] text-[#222] mb-3 relative z-10 tracking-tight">
+                                Diploma In Software<br />Engineering
+                            </h2>
+                            <p className="text-[0.82rem] text-gray-500 leading-relaxed mb-6 font-medium relative z-10 max-w-[220px]">
+                                You can see brief details about IJSE Campus here.
+                            </p>
+                        </div>
+
+                        {/*<div className="absolute bottom-16 left-0 w-[50px] h-[2px] bg-[#fbc02d] opacity-60" />*/}
+                    </div>
+
+                    {/* Right Column: Details */}
+                    <div className="lg:w-2/3 relative">
+
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="w-[35px] h-[3px] bg-[#F57500]" />
+                            <h3 className="font-roboto font-bold text-[1.5rem] md:text-[1.8rem] text-[#222] tracking-tight">
+                                Education and <span className="text-[#F57500]">IJSE</span> certificates
+                            </h3>
+                        </div>
+
+                        {/* Category Tabs */}
+                        <div className="bg-[#2d2d2d] text-white inline-flex flex-wrap items-center px-7 py-4 mb-8 text-[0.62rem] font-semibold tracking-[0.18em] uppercase shadow-sm">
+                            <span className="text-[#F57500] mr-7">Category :</span>
+                            <div className="flex items-center gap-7">
+                                <span className="hover:text-[#F57500] cursor-pointer transition-colors duration-200">Diploma</span>
+                                <span className="hover:text-[#F57500] cursor-pointer transition-colors duration-200">Certificates</span>
+                                <span className="hover:text-[#F57500] cursor-pointer transition-colors duration-200">Technology</span>
+                            </div>
+                        </div>
+
+                        <h4 className="text-[0.95rem] font-bold text-gray-800 mb-3 tracking-tight">You can see some information about me.</h4>
+                        <p className="text-[0.8rem] text-gray-600 leading-[1.95] mb-10 font-medium max-w-[650px]">
+                            I'm a proficient software developer with an impressive skill set in Java, PHP, and Angular. I studied at the IJSE Institute for two years, where I gained hands-on experience developing various software applications. My ability to write clean and efficient code is evident in my work, which I completed with great attention to detail. My certificates in these programming languages demonstrate my proficiency and commitment to excellence. My talent and dedication make me an ideal candidate for any software development position.
+                        </p>
+
+                        <div className="flex flex-col lg:flex-row gap-12">
+                            {/* Meta Info */}
+                            <div className="flex flex-col gap-4 mb-12 text-[0.75rem]">
+                                <div className="flex gap-4">
+                                    <span className="block text-gray-400 font-bold tracking-[0.15em] uppercase text-[0.6rem] min-w-[50px]">Date :</span>
+                                    <span className="font-bold text-gray-800 tracking-wide">06.08.2016 – 03.02.2018</span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <span className="block text-gray-400 font-bold tracking-[0.15em] uppercase text-[0.6rem] min-w-[70px]">Skills :</span>
+                                    <span className="font-bold text-gray-800 tracking-wide">PHP/JAVASCRIPT/JAVA</span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <span className="block text-gray-400 font-bold tracking-[0.15em] uppercase text-[0.6rem] min-w-[70px]">Location :</span>
+                                    <span className="font-bold text-gray-800 tracking-wide">GALLE/PANADURA</span>
+                                </div>
+                            </div>
+
+                            {/* ABOUT IJSE Card */}
+                            <div className="relative bg-white border-2 border-[#0000001a] p-8 md:p-10 shadow-[0_8px_30px_rgba(0,0,0,0.06)]  max-w-[620px] mb-14 lg:mr-auto">
+
+                                <div className="absolute top-4 left-7 text-[5.5rem] text-gray-100/80 font-serif leading-none select-none">
+                                    &ldquo;
+                                </div>
+
+                                <h5 className="font-roboto font-bold text-[1.05rem] text-[#333] mb-4 relative z-10 tracking-tight">ABOUT IJSE</h5>
+                                <p className="text-[0.82rem] text-gray-500 italic leading-[1.85] relative z-10 max-w-[90%]">
+                                    "Offer BSc(hons) Computer Science and software engineering degrees. Produce IT professional to the IT industry as a leading institute for IT"
+                                </p>
+
+                                <div className="absolute bottom-4 right-7 text-[5.5rem] text-gray-100/80 font-serif leading-none select-none rotate-180">
+                                    &ldquo;
+                                </div>
+
+                                <div className="absolute -top-10 right-6 md:right-8 w-[95px] h-[95px] bg-white rounded-full border-2 border-[#0000001a] shadow-[0_6px_20px_rgba(0,0,0,0.08)] flex items-center justify-center z-20 overflow-hidden p-2">
+                                    <img
+                                        className="w-full h-full object-cover object-center rounded-full brightness-50 saturate-70"
+                                        src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                                        alt="IJSE logo"
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {/* View Project Button — UNCHANGED */}
+                        <button className="bg-[#F57500] hover:bg-[#F57500] text-[#222] font-syne text-[0.65rem] tracking-[0.25em] uppercase font-extrabold py-4 px-12 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-0.5">
+                            View Project
+                        </button>
+
+                    </div>
+
+
+                </div>
+            </div>
+            {/* View Project Navigation Bar */}
+            <div className="flex items-stretch w-full  bg-[#2d2d2d] mt-2">
+                {/* Left Arrow Button */}
+                <button
+                    onClick={() => navigate('/projects')}
+                    className="group flex items-center justify-center w-[160px] md:w-[200px] bg-[#3a3a3a] hover:bg-[#F57500] transition-colors duration-300 py-5"
+                    aria-label="Previous project"
+                >
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-[#F57500] group-hover:text-white transition-colors duration-300"
+                    >
+                        <line x1="19" y1="12" x2="5" y2="12" />
+                        <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                </button>
+
+                {/* Center Label */}
+                <button
+                    className="group flex-1 flex items-center justify-center px-4 md:px-8 py-5 bg-[#2d2d2d] border-x border-[#00000033] hover:bg-[#3a3a3a] transition-colors duration-300"
+                >
+                    <span className="font-syne text-[0.62rem] tracking-[0.35em] uppercase font-extrabold text-white/80 group-hover:text-[#F57500] transition-colors duration-300 whitespace-nowrap">
+                        All Projects
+                    </span>
+                </button>
+
+                {/* Right Arrow Button */}
+                <button
+                    onClick={() => navigate('/portfolio')}
+                    className="group flex items-center justify-center w-[160px] md:w-[200px] bg-[#3a3a3a] hover:bg-[#F57500] transition-colors duration-300 py-5"
+                    aria-label="Next project"
+                >
+                    <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        className="text-[#F57500] group-hover:text-white transition-colors duration-300"
+                    >
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                    </svg>
+                </button>
             </div>
         </div>
     );
@@ -261,18 +413,19 @@ const CertificatesSection = () => {
     const intervalRef = useRef(null);
 
     const isOpen = selectedIndex !== null;
+    const len = certificatesData.length;
 
     // Auto-scroll thumbnails
     useEffect(() => {
         if (!isPaused && !isOpen) {
             intervalRef.current = setInterval(() => {
-                setCurrentIndex((prev) => (prev + 1) % certificatesData.length);
+                setCurrentIndex((prev) => (prev + 1) % len);
             }, 3500);
         }
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
-    }, [isPaused, isOpen]);
+    }, [isPaused, isOpen, len]);
 
     // Scroll slider to active card
     useEffect(() => {
@@ -289,21 +442,25 @@ const CertificatesSection = () => {
         }
     }, [currentIndex, isOpen]);
 
-    const handlePrev = (count = 1) => {
+    const handlePrev = useCallback((count = 1) => {
         setSelectedIndex((prev) => {
             const base = prev ?? 0;
-            return (base - count + certificatesData.length) % certificatesData.length;
+            return (base - count + len) % len;
         });
-    };
+    }, [len]);
 
-    const handleNext = (count = 1) => {
+    const handleNext = useCallback((count = 1) => {
         setSelectedIndex((prev) => {
             const base = prev ?? 0;
-            return (base + count) % certificatesData.length;
+            return (base + count) % len;
         });
-    };
+    }, [len]);
 
-    const handleClose = () => setSelectedIndex(null);
+    const handleSelect = useCallback((idx) => {
+        setSelectedIndex(idx);
+    }, []);
+
+    const handleClose = useCallback(() => setSelectedIndex(null), []);
 
     // Keyboard navigation
     useEffect(() => {
@@ -315,8 +472,7 @@ const CertificatesSection = () => {
         };
         window.addEventListener('keydown', handleKey);
         return () => window.removeEventListener('keydown', handleKey);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isOpen, selectedIndex]);
+    }, [isOpen, handlePrev, handleNext, handleClose]);
 
     const handleDotClick = (idx) => setCurrentIndex(idx);
 
@@ -349,15 +505,15 @@ const CertificatesSection = () => {
                 {/* Navigation Arrows */}
                 <div className="flex gap-6 mb-10">
                     <button
-                        onClick={() => setCurrentIndex((prev) => (prev - 1 + certificatesData.length) % certificatesData.length)}
-                        className="text-yellow-500 hover:text-yellow-300 transition-transform hover:scale-110"
+                        onClick={() => setCurrentIndex((prev) => (prev - 1 + len) % len)}
+                        className="text-[#F57500] hover:text-white transition-transform hover:scale-110"
                         aria-label="Previous certificate"
                     >
                         <ArrowLeft />
                     </button>
                     <button
-                        onClick={() => setCurrentIndex((prev) => (prev + 1) % certificatesData.length)}
-                        className="text-yellow-500 hover:text-yellow-300 transition-transform hover:scale-110"
+                        onClick={() => setCurrentIndex((prev) => (prev + 1) % len)}
+                        className="text-[#F57500] hover:text-white transition-transform hover:scale-110"
                         aria-label="Next certificate"
                     >
                         <ArrowRight />
@@ -424,7 +580,7 @@ const CertificatesSection = () => {
 
                                     {/* Active indicator */}
                                     {isActive && (
-                                        <div className="absolute top-0 left-0 right-0 h-[3px] bg-yellow-500 z-20" />
+                                        <div className="absolute top-0 left-0 right-0 h-[3px] bg-[#F57500] z-20" />
                                     )}
                                 </div>
 
@@ -445,17 +601,17 @@ const CertificatesSection = () => {
                 {/* Footer / Pagination */}
                 <div className="flex justify-between items-center mt-4 pb-8 border-t border-gray-800 pt-6">
                     <div className="flex items-center gap-3 text-sm font-mono">
-                        <span className="text-yellow-500">
+                        <span className="text-[#F57500]">
                             {String(currentIndex + 1).padStart(2, '0')}
                         </span>
                         <span className="text-gray-500">/</span>
                         <span className="text-gray-500">
-                            {String(certificatesData.length).padStart(2, '0')}
+                            {String(len).padStart(2, '0')}
                         </span>
                         <div className="w-12 h-[2px] bg-gray-700 ml-2 relative overflow-hidden">
                             <div
-                                className="absolute left-0 top-0 h-full bg-yellow-500 transition-all duration-300"
-                                style={{ width: `${((currentIndex + 1) / certificatesData.length) * 100}%` }}
+                                className="absolute left-0 top-0 h-full bg-[#F57500] transition-all duration-300"
+                                style={{ width: `${((currentIndex + 1) / len) * 100}%` }}
                             />
                         </div>
                     </div>
@@ -466,7 +622,7 @@ const CertificatesSection = () => {
                                 key={dot}
                                 onClick={() => handleDotClick(dot)}
                                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                                    currentIndex === dot ? 'bg-yellow-500 scale-125' : 'bg-gray-600 hover:bg-gray-400'
+                                    currentIndex === dot ? 'bg-[#F57500] scale-125' : 'bg-gray-600 hover:bg-gray-400'
                                 }`}
                                 aria-label={`Go to certificate ${dot + 1}`}
                             />
@@ -475,14 +631,15 @@ const CertificatesSection = () => {
                 </div>
             </div>
 
-            {/* ─── LIGHTBOX ─────────────────────────────────────────────── */}
+            {/* LIGHTBOX */}
             <Lightbox
                 isOpen={isOpen}
                 currentIndex={selectedIndex ?? 0}
                 images={certificatesData}
                 onClose={handleClose}
-                onPrev={handlePrev}
-                onNext={handleNext}
+                onPrev={() => handlePrev(1)}
+                onNext={() => handleNext(1)}
+                onSelect={handleSelect}
             />
         </div>
     );
@@ -499,7 +656,7 @@ const Certificates = () => {
 
             <div className="fixed inset-0 z-0 pointer-events-none bg-noise opacity-10" />
 
-            {/* ─── PAGE HEADER ──────────────────────────────────────────────── */}
+            {/* PAGE HEADER */}
             <div className="relative z-10 pt-24 pb-12 px-5 md:px-[4.5rem]">
                 <div className="flex items-center gap-3.5 mb-6">
                     <div className="w-[30px] h-[1.5px] bg-[#F57500]" />
@@ -511,7 +668,7 @@ const Certificates = () => {
                 </h1>
             </div>
 
-            {/* ─── MARQUEE ──────────────────────────────────────────────────── */}
+            {/* MARQUEE */}
             <div className="relative z-10 border-y border-white/5 overflow-hidden py-4">
                 <div className="flex whitespace-nowrap animate-marquee">
                     {[...marqueeItems, ...marqueeItems, ...marqueeItems].map((item, i) => (
@@ -522,12 +679,12 @@ const Certificates = () => {
                     ))}
                 </div>
             </div>
-
-            {/* ─── CERTIFICATES SECTION ─────────────────────────────────────── */}
             <CertificatesSection />
+            <EducationSection />
 
-            {/* ─── CTA SECTION ──────────────────────────────────────────────── */}
-            <div className="relative z-10 px-3 md:px-[4.5rem] py-20 md:py-28 bg-[#060606]">
+
+            {/* CTA SECTION — UNCHANGED */}
+            <div className="relative z-10 px-3 md:px-[4.5rem] py-20 md:py-28 ">
                 <div className="max-w-[800px] mx-auto text-center flex flex-col items-center gap-6">
                     <div className="flex items-center gap-3.5">
                         <div className="w-[30px] h-[1.5px] bg-[#F57500]" />
@@ -554,13 +711,21 @@ const Certificates = () => {
                 </div>
             </div>
 
-            {/* ─── GLOBAL STYLES ────────────────────────────────────────────── */}
-            <style jsx>{`
+            {/* GLOBAL STYLES — fonts preserved exactly as original */}
+            <style>{`
                 @import url('https://fonts.googleapis.com/css2?family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Oswald:wght@500;700&family=Roboto:wght@500&display=swap');
                 @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+                
+                 @import url('https://fonts.googleapis.com/css2?family=Anton&family=Barlow+Condensed:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Mukta+Vaani:wght@200;300;400;500;600;700;800&family=Oswald:wght@500;700&family=Roboto:wght@500;700&family=Syne:wght@400;600;700;800&display=swap');
 
                 .font-oswald {
                     font-family: 'Oswald', sans-serif;
+                }
+                .font-mukta {
+                    font-family: 'Mukta Vaani', sans-serif;
+                }
+                .font-roboto {
+                    font-family: 'Roboto', sans-serif;
                 }
 
                 .bg-noise {
