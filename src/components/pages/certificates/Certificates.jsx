@@ -294,7 +294,7 @@ const Certificates = () => {
             {/* ═══════════════════════════════════════════════════════════════ */}
             {/* ─── CERTIFICATES SECTION ────────────────────────────────────── */}
             {/* ═══════════════════════════════════════════════════════════════ */}
-            <div ref={gridRef} className="relative z-10 px-5 md:px-[4.5rem] py-24 md:py-32 overflow-hidden">
+            <div ref={gridRef} className="relative z-10 px-5 md:px-[4.5rem] pt-16 md:pt-20 overflow-hidden">
 
                 {/* Decorative background text */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 font-oswald uppercase text-[18vw] leading-none text-white/[0.015] select-none pointer-events-none whitespace-nowrap z-0">
