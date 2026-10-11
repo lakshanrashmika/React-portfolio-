@@ -12,7 +12,7 @@ const navItems = [
 ];
 
 const certificateItems = [
-    { label: 'All Certificates', href: '/certificates' },
+    { label: 'All Ijse', href: '/certificates' },
     { label: 'Web Development', href: '/certificates/web' },
     { label: 'UI/UX Design', href: '/certificates/uiux' },
     { label: 'Cloud & DevOps', href: '/certificates/cloud' },
@@ -1156,7 +1156,7 @@ export default function Header() {
                             <span className="mob-nav-arrow">→</span>
                         </a>
 
-                        {/* Certificates dropdown (mobile) */}
+                        {/* Ijse dropdown (mobile) */}
                         <div className="mob-dropdown-wrapper">
                             <button
                                 type="button"
