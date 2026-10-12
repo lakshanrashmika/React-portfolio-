@@ -21,15 +21,6 @@ const tickerItems = ["DESIGN", "BUILD", "LEAD", "DELIVER"];
 // CERTIFICATE DATA
 // ─────────────────────────────────────────────────────────────────────────────
 const certificateData = [
-    // {
-    //     id: 1,
-    //     index: "01.",
-    //     title: "Master of Science in Software Engineering",
-    //     university: "Kingston University - UK",
-    //     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Kingston_University_London_logo.svg/400px-Kingston_University_London_logo.svg.png",
-    //     logoBg: "bg-white",
-    //     description: "After completing my Bachelor's degree at London Metropolitan University, I immediately pursued my Master's in Software Engineering at Kingston University (January 2023 - September 2024) to ensure continuous academic progression. This allowed me to build on my knowledge without gaps, further strengthening my expertise in the field. I have now successfully completed the program and hold an MSc degree, which complements my 7+ years of industry experience.",
-    // },
     {
         id: 1,
         index: "01.",
@@ -38,6 +29,7 @@ const certificateData = [
         logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/London_Metropolitan_University_logo.svg/400px-London_Metropolitan_University_logo.svg.png",
         logoBg: "bg-black",
         description: "I need to change my position in this industry, so I need to complete my degree first. After I start my degree at a metropolitan university in London, it's one year program. I started that course in 2021 September. In 2022 September I completed my degree with second-class upper. Then after that, I joined \"Hype invention (pvt) (LTD)\" as a \"Software Engineer\".",
+        link: "/certificates/#",
     },
     {
         id: 2,
@@ -47,6 +39,7 @@ const certificateData = [
         logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/IJSE_Logo.png/400px-IJSE_Logo.png",
         logoBg: "bg-white",
         description: "I am completing my graduate diploma in \"IJSE\" in 2018. And I have another certificate from IJSE named \"Advanced Business Java Developer\". It was a two-year program for the diploma level. After that I got that certificate from them in February 2018 and I joined my first job in \"DMS Software Engineering pvt (LTD)\" as a \"trainee Software Engineer\".",
+        link: "/ijse-certificates",
     },
 ];
 
@@ -198,14 +191,33 @@ const Certificates = () => {
                         {cert.description}
                     </p>
 
-                    {/* Button */}
+                    {/* Improved Button */}
                     <button
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            if (cert.link) navigate(cert.link);
+                        }}
                         onMouseDown={(e) => e.stopPropagation()}
                         onTouchStart={(e) => e.stopPropagation()}
-                        className="self-start bg-[#F5B041] text-black font-syne text-[0.65rem] font-extrabold tracking-[2px] uppercase py-3 px-6 transition-all duration-200 hover:bg-[#ffc46b] hover:scale-105 active:scale-95"
-                        style={{ clipPath: 'polygon(0 0, calc(100% - 8px) 0, 100% 100%, 8px 100%)' }}
+                        className="group/btn relative self-start inline-flex items-center gap-3 bg-transparent text-[#F57500] font-syne text-[0.65rem] font-extrabold tracking-[2.5px] uppercase py-3.5 pl-5 pr-4 border border-[#F57500]/40 overflow-hidden transition-all duration-300 hover:border-[#F57500] hover:text-white hover:pr-6 active:scale-[0.97]"
+                        // style={{ clipPath: 'polygon(0 0, calc(100% - 10px) 0, 100% 100%, 10px 100%)' }}
                     >
-                        Check it Out
+                        {/* Fill sweep */}
+                        <span className="absolute inset-0 bg-[#F57500] origin-left scale-x-0 group-hover/btn:scale-x-100 transition-transform duration-400 ease-[cubic-bezier(0.77,0,0.18,1)]" />
+
+                        <span className="relative z-10">View Credential</span>
+
+                        {/* Animated arrow */}
+                        <span className="relative z-10 flex items-center justify-center w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12" />
+                                <polyline points="12 5 19 12 12 19" />
+                            </svg>
+                        </span>
+
+                        {/* Corner accent */}
+                        <span className="absolute top-0 right-0 w-2 h-2 bg-[#F57500] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
                     </button>
                 </div>
             </div>
@@ -263,16 +275,36 @@ const Certificates = () => {
                 <div className="relative z-20 max-w-full md:max-w-full">
                     <div className={`flex items-center gap-3.5 mb-7 ${isMounted ? 'animate-fadeUp' : 'opacity-0'}`} style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
                         <div className="w-[30px] h-[1.5px] bg-[#F57500]" />
-                        <span className="text-[0.58rem] tracking-[5px] uppercase text-[#F57500] font-extrabold">What I Do</span>
+                        <span className="text-[0.58rem] tracking-[5px] uppercase text-[#F57500] font-extrabold">The Work I Do Best</span>
                         <span className="ml-1.5 bg-[rgba(245,117,0,0.12)] border border-[rgba(245,117,0,0.3)] text-[0.52rem] tracking-[2px] text-[#F57500] py-0.5 px-2.5 rounded-full hidden md:inline">2025</span>
                     </div>
                     <h1 className={`font-oswald uppercase text-[clamp(3.9rem,13vw,10.5rem)] leading-[0.87] tracking-[-3px] text-white mb-8 ${isMounted ? 'animate-fadeUp' : 'opacity-0'}`} style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}>
-                        MY <span className="inline-block [-webkit-text-stroke:1.8px_#F57500] text-transparent skew-x-[-3deg]"> SERVICES</span><br /><span className="text-[#F57500]">EXPERTISE</span>
+                        BUILT <span className="inline-block [-webkit-text-stroke:1.8px_#F57500] text-transparent skew-x-[-3deg]"> ON</span><br /><span className="text-[#F57500]">FOUNDATIONS</span>
                     </h1>
-                    <div className={`flex flex-col md:flex-row items-start md:items-end pt-2 border-t border-white/10 flex-wrap gap-5 ${isMounted ? 'animate-fadeUp' : 'opacity-0'}`} style={{ animationDelay: '0.75s', animationFillMode: 'forwards' }}>
-                        <p className="font-cormorant italic text-[0.95rem] md:text-[1.12rem] text-white/60 leading-relaxed max-w-full md:max-w-[420px]">
-                            From software engineering and technical leadership to project management and UI/UX design — I deliver end-to-end solutions with <em className="not-italic text-white/80">precision</em> and <em className="not-italic text-white/80">purpose</em>.
+
+                    {/* ─── IMPROVED HERO DESCRIPTION ─────────────────────── */}
+                    <div className={`flex flex-col md:flex-row items-start md:items-end pt-6 border-t border-white/10 flex-wrap gap-6 ${isMounted ? 'animate-fadeUp' : 'opacity-0'}`} style={{ animationDelay: '0.75s', animationFillMode: 'forwards' }}>
+                        <p className="font-cormorant italic text-[1rem] md:text-[1.18rem] text-white/65 leading-[1.75] max-w-full md:max-w-[520px]">
+                            I architect and ship <em className="not-italic text-white/90">production-grade software</em> that scales — from concept to deployment. With <em className="not-italic text-white/90">2 years</em> across engineering, leadership, and design, I bridge the gap between technical depth and business outcomes, turning complex problems into <em className="not-italic text-[#F57500]/90">clean, deliberate solutions</em>.
                         </p>
+
+                        {/* Quick stat strip */}
+                        <div className="flex items-center gap-6 md:gap-8 md:ml-auto">
+                            {[
+                                { value: '2', label: 'Years Exp.' },
+                                { value: '40+', label: 'Projects' },
+                                { value: '100%', label: 'Delivery' },
+                            ].map((stat, i) => (
+                                <div key={i} className="flex flex-col">
+                                    <span className="font-oswald text-[1.5rem] md:text-[1.75rem] text-white leading-none tracking-tight">
+                                        {stat.value}
+                                    </span>
+                                    <span className="font-barlow-condensed text-[0.55rem] tracking-[3px] uppercase text-white/40 mt-1">
+                                        {stat.label}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -304,15 +336,48 @@ const Certificates = () => {
                 <div className="max-w-[1300px] mx-auto relative z-10">
 
                     {/* Header + Nav */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20 md:mb-24">
-                        <div>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 md:mb-16">
+                        <div className="max-w-[720px]">
                             <div className="flex items-center gap-3.5 mb-5">
                                 <div className="w-[30px] h-[1.5px] bg-[#F57500]" />
                                 <span className="text-[0.58rem] tracking-[5px] uppercase text-[#F57500] font-extrabold">Education & Certifications</span>
                             </div>
-                            <h2 className="font-oswald uppercase text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] tracking-[-1px] text-white">
+                            <h2 className="font-oswald uppercase text-[clamp(2rem,5vw,3.5rem)] leading-[0.95] tracking-[-1px] text-white mb-5">
                                 Academic <span className="text-[#F57500]">Journey</span>
                             </h2>
+
+                            {/* ─── NEW: SECTION DESCRIPTION ─────────────────── */}
+                            {/*<p className="font-cormorant italic text-[0.95rem] md:text-[1.08rem] text-white/55 leading-[1.75] max-w-[620px]">*/}
+                            {/*    Every credential here represents a deliberate step — not just a certificate, but a <em className="not-italic text-white/85">turning point</em> that unlocked the next chapter of my career. From foundational diplomas to a UK honours degree, each milestone sharpened my engineering discipline and deepened my understanding of what it takes to <em className="not-italic text-[#F57500]/90">build software that matters</em>.*/}
+                            {/*</p>*/}
+
+                            <p className="font-cormorant italic text-[0.95rem] md:text-[1.08rem] text-white/55 leading-[1.75] max-w-[620px]">
+                                Each qualification mentioned here represents not merely a certificate, but a <em className="not-italic text-white/85">significant turning point</em> and a purposeful step that opened the next chapter of my professional career. Every milestone within the diploma courses honed my engineering skills and deepened my understanding of what is required to <em className="not-italic text-[#F57500]/90">create meaningful software</em>.
+                            </p>
+
+                            {/* Small meta row under description */}
+                            <div className="flex items-center gap-5 mt-5 flex-wrap">
+                                <div className="flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-[#F57500] rounded-full" />
+                                    <span className="font-barlow-condensed text-[0.6rem] tracking-[3px] uppercase text-white/40">
+                                        2 Credentials
+                                    </span>
+                                </div>
+                                <div className="w-px h-3 bg-white/15" />
+                                <div className="flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-[#F57500] rounded-full" />
+                                    <span className="font-barlow-condensed text-[0.6rem] tracking-[3px] uppercase text-white/40">
+                                        UK Accredited
+                                    </span>
+                                </div>
+                                <div className="w-px h-3 bg-white/15" />
+                                <div className="flex items-center gap-2">
+                                    <span className="w-1.5 h-1.5 bg-[#F57500] rounded-full" />
+                                    <span className="font-barlow-condensed text-[0.6rem] tracking-[3px] uppercase text-white/40">
+                                        2018 — 2022
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         {/* Nav arrows + counter — only visible on mobile/tablet */}
@@ -370,8 +435,6 @@ const Certificates = () => {
                                 onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
                                 onTouchEnd={handleDragEnd}
                             >
-                                {/* NOTE: We do NOT use overflow-hidden here so the logo circle stays visible. */}
-                                {/* We clip individual slides instead via padding + inner wrapper. */}
                                 <div
                                     className="flex"
                                     style={{
@@ -488,6 +551,7 @@ const Certificates = () => {
                 .font-barlow-condensed { font-family: 'Barlow Condensed', sans-serif; }
                 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 .animate-fadeIn { animation: fadeIn 0.6s ease forwards; }
+                .duration-400 { transition-duration: 400ms; }
 
                 @media (prefers-reduced-motion: reduce) {
                     .animate-fadeUp, .animate-ticker, .animate-marquee, .animate-scrollThumb, .animate-float {
