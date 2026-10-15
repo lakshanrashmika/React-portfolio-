@@ -364,7 +364,7 @@ const SkillsSection = () => {
 
                         {/* Section Number */}
                         <div className="section-number absolute right-2.5 top-[-2rem] text-[224px] font-bold text-gray-200 opacity-70 font-['Oswald'] -rotate-90 md:text-[180px]">
-                            <span className="relative overflow-hidden">0</span>2.
+                            <span className="relative overflow-hidden">0</span>5.
                         </div>
                     </section>
 

@@ -139,10 +139,10 @@ const servicesData = [
 
 // Stats data
 const statsData = [
-    { number: "8+", label: "Years", suffix: "Software Engineering" },
-    { number: "148+", label: "Projects", suffix: "Delivered globally" },
-    { number: "62", label: "Clients", suffix: "Across 20 countries" },
-    { number: "12", label: "Awards", suffix: "Industry recognition" },
+    { end: 8, suffix: "+", label: "Years", meta: "Software Engineering" },
+    { end: 148, suffix: "+", label: "Projects", meta: "Delivered globally" },
+    { end: 62, suffix: "", label: "Clients", meta: "Across 20 countries" },
+    { end: 12, suffix: "", label: "Awards", meta: "Industry recognition" },
 ];
 
 // Marquee items
@@ -159,6 +159,52 @@ const marqueeItems = [
 
 // Ticker items
 const tickerItems = ["DESIGN", "BUILD", "LEAD", "DELIVER"];
+
+// ─────────────────────────────────────────────────────────────────────────────
+// COUNT UP (animates number when in view)
+// ─────────────────────────────────────────────────────────────────────────────
+const CountUp = ({ end, suffix = "", duration = 1800, start = 0 }) => {
+    const [count, setCount] = useState(start);
+    const ref = useRef(null);
+    const hasAnimated = useRef(false);
+
+    useEffect(() => {
+        const node = ref.current;
+        if (!node) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && !hasAnimated.current) {
+                        hasAnimated.current = true;
+                        const startTime = performance.now();
+
+                        const tick = (now) => {
+                            const elapsed = now - startTime;
+                            const progress = Math.min(elapsed / duration, 1);
+                            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
+                            setCount(Math.floor(eased * (end - start) + start));
+
+                            if (progress < 1) {
+                                requestAnimationFrame(tick);
+                            } else {
+                                setCount(end);
+                            }
+                        };
+
+                        requestAnimationFrame(tick);
+                    }
+                });
+            },
+            { threshold: 0.4 }
+        );
+
+        observer.observe(node);
+        return () => observer.disconnect();
+    }, [end, duration, start]);
+
+    return <span ref={ref}>{count}{suffix}</span>;
+};
 
 // ─────────────────────────────────────────────────────────────────────────────
 // FLOATING IMAGE CARD (from ServicesSection)
@@ -565,13 +611,13 @@ const Services = () => {
                             style={{ transitionDelay: `${idx * 100}ms` }}
                         >
                             <div className="font-oswald text-[2.5rem] md:text-[3.5rem] leading-none text-[#F57500]">
-                                {stat.number}
+                                <CountUp end={stat.end} suffix={stat.suffix} duration={1800} />
                             </div>
                             <div className="font-barlow-condensed text-[10px] tracking-[3px] uppercase text-white font-semibold">
                                 {stat.label}
                             </div>
                             <div className="font-cormorant italic text-[0.78rem] text-white/40">
-                                {stat.suffix}
+                                {stat.meta}
                             </div>
                         </div>
                     ))}

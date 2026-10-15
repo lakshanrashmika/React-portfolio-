@@ -1,4 +1,6 @@
 import React from 'react';
+import img1 from '../../../assets/image/Codingcad.png'
+
 
 const ResumeSection = () => {
 
@@ -17,7 +19,7 @@ const ResumeSection = () => {
                                     <div className="absolute left-0 -top-10 h-0.5 w-8 bg-orange-500"></div>
                                     <div className="absolute left-0 -bottom-2.5 h-px w-11/12 bg-gray-200"></div>
                                     <h3 className="text-2xl text-left uppercase text-black font-black float-left w-full tracking-wider pb-2.5 leading-8 md:text-xl">
-                                        Some Words About Me
+                                        From Engineering to Associate software engineer
                                     </h3>
                                     <p className="pt-2.5 text-gray-600 text-left text-xs uppercase font-normal tracking-wider leading-6 relative z-20 max-w-md">
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas in pulvinar neque. Nulla finibus lobortis pulvinar.
@@ -34,7 +36,7 @@ const ResumeSection = () => {
                                         <div className="flex flex-col lg:flex-row gap-6">
                                             {/* Left Column - Company Info */}
                                             <div className="lg:w-2/4">
-                                                <div className="resum-header workres relative border border-gray-200 bg-gray-50 rounded-lg p-[2rem_2rem_2rem_5rem]">
+                                                <div className="resum-header workres relative border border-gray-200 bg-gray-50 p-[2rem_2rem_2rem_5rem]">
                                                     {/* Icon */}
                                                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 border border-gray-200 rounded bg-white flex items-center justify-center text-orange-500">
                                                         <i className="fa fa-briefcase"></i>
@@ -48,11 +50,14 @@ const ResumeSection = () => {
                                                         <i className="fa fa-briefcase"></i>
                                                     </div>
 
-                                                    <h3 className="text-lg font-semibold text-gray-800 text-left mb-2">
-                                                        Work in company "Dolore"
+                                                    <h3 className="text-base font-bold text-gray-800 text-left mb-2">
+                                                        Comtech Web Solutions
                                                     </h3>
-                                                    <span className="text-sm text-gray-600 uppercase text-left block">
-                                                    2012-2016
+                                                    <h3 className="text-[16px] font-semibold text-gray-800 text-left mb-2">
+                                                        Associate Software Engineer
+                                                    </h3>
+                                                    <span className="text-xs font-bold text-gray-400 uppercase text-left block">
+                                                    Current Position
                                                     </span>
                                                 </div>
                                             </div>
@@ -67,26 +72,26 @@ const ResumeSection = () => {
 
                                             {/* Right Column - Job Details */}
                                             <div className="lg:w-3/4">
-                                                <div className="resum-content fl-wrap border border-gray-200 bg-gray-50 rounded-lg p-8">
+                                                <div className="resum-content fl-wrap border border-gray-200 bg-gray-50  p-8">
                                                     <h4 className="text-base font-extrabold text-gray-800 uppercase text-left mb-4">
-                                                        Complete the project "domik"
+                                                        Software Development
                                                     </h4>
-                                                    <p className="text-gray-700 text-left mb-6">
-                                                        There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words
+                                                    <p className="text-gray-700 text-left text-[13px]  font-normal mb-6">
+                                                        As an Associate Software Engineer, I am engaged in the development and maintenance of software and web-based solutions in alignment with project and company requirements, contributing to feature implementation, debugging, and ongoing system improvements. I work collaboratively within agile teams to ensure deliverables meet both technical standards and business objectives.
                                                     </p>
                                                     <div className="dec-list fl-wrap mb-6">
-                                                        <ul className="space-y-3">
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                        <ul className="space-y-1">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Leverage agile frameworks to provide a robust synopsis.
+                                                                Institute of Analytics (IoA) Web site
                                                             </li>
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Iterative approaches to corporate strategy foster.
+                                                                Crowned Cross Health Care Web Site
                                                             </li>
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Bring to the table win-win survival strategies.
+                                                                Pv Engineering Solar Solutions pvt Web Site
                                                             </li>
                                                         </ul>
                                                     </div>
@@ -99,8 +104,8 @@ const ResumeSection = () => {
                                     <div className="custom-inner ncmb relative">
                                         <div className="flex flex-col lg:flex-row gap-6">
                                             {/* Left Column - Company Info */}
-                                            <div className="lg:w-1/3">
-                                                <div className="resum-header workres relative border border-gray-200 bg-gray-50 rounded-lg p-[2rem_2rem_2rem_5rem]">
+                                            <div className="lg:w-2/4">
+                                                <div className="resum-header workres relative border border-gray-200 bg-gray-50  p-[2rem_2rem_2rem_5rem]">
                                                     {/* Icon */}
                                                     <div className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 border border-gray-200 rounded bg-white flex items-center justify-center text-orange-500">
                                                         <i className="fa fa-briefcase"></i>
@@ -114,43 +119,43 @@ const ResumeSection = () => {
                                                         <i className="fa fa-briefcase"></i>
                                                     </div>
 
-                                                    <h3 className="text-lg font-semibold text-gray-800 text-left mb-2">
-                                                        Work in company "Dolore"
+                                                    <h3 className="text-base font-bold text-gray-800 uppercase text-left mb-2">
+                                                        Codingcad (pvt) LTD
                                                     </h3>
-                                                    <span className="text-sm text-gray-600 uppercase text-left block">
-                                                    2012-2016
+                                                    <h3 className="text-[16px] font-semibold text-gray-800 text-left mb-2">
+                                                        Trainee Software Engineer
+                                                    </h3>
+                                                    <span className="text-xs font-bold text-gray-400 uppercase text-left block">
+                                                    2025-2026
                                                     </span>
                                                 </div>
                                             </div>
 
                                             {/* Right Column - Job Details */}
-                                            <div className="lg:w-2/3">
-                                                <div className="resum-content fl-wrap border border-gray-200 bg-gray-50 rounded-lg p-8 mb-6">
+                                            <div className="lg:w-2/4">
+                                                <div className="resum-content fl-wrap border border-gray-200 bg-gray-50 p-8 ">
                                                     <h4 className="text-base font-extrabold text-gray-800 uppercase text-left mb-4">
-                                                        Making this the first
+                                                        Early Software Engineering Experience
                                                     </h4>
-                                                    <p className="text-gray-700 text-left mb-6">
-                                                        We started as a small, subdue, called hath give fourth. Them one over saying. So the god, greater. You. Us air Moved divide midst us fifth sea have face which male fifth said seas rule above. All the Lorem Ipsum generators on the Internet tend.
+                                                    <p className="text-gray-700 text-left text-[13px]  font-normal mb-6">
+                                                        Started my professional software engineering career working with development teams on web and software projects, building a strong foundation in collaborative development, version control, and agile methodologies. These early experiences shaped my approach to problem-solving and set the stage for the more complex, scalable systems I work on today.
                                                     </p>
                                                     <div className="dec-list fl-wrap mb-6">
-                                                        <ul className="space-y-3">
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                        <ul className="space-y-1">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Leverage agile frameworks to provide a robust synopsis.
+                                                                Institute of Analytics (IoA) Web site
                                                             </li>
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Iterative approaches to corporate strategy foster.
+                                                                Crowned Cross Health Care Web Site
                                                             </li>
-                                                            <li className="text-gray-600 text-left relative pl-7">
+                                                            <li className="text-gray-600 font-bold text-sm text-left relative pl-7">
                                                                 <span className="absolute left-0 text-orange-500">•</span>
-                                                                Scalable gun control breakthroughs social movement.
+                                                                Pv Engineering Solar Solutions pvt Web Site
                                                             </li>
                                                         </ul>
                                                     </div>
-                                                    <p className="text-gray-700 text-left">
-                                                        All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words
-                                                    </p>
                                                 </div>
 
                                                 {/* Download Button */}
@@ -162,10 +167,10 @@ const ResumeSection = () => {
                                                 {/*</a>*/}
                                             </div>
 
-                                            <div className="lg:w-3/3">
+                                            <div className="lg:w-1/4">
                                                 <img
-                                                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=600&h=800&fit=crop"
-                                                    className="w-full h-auto block relative z-20"
+                                                    src={img1}
+                                                    className="lg:w-full w-[50%] h-auto block relative z-20"
                                                     alt="Solonick"
                                                 />
                                             </div>

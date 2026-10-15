@@ -72,7 +72,7 @@ const FactsSection = () => {
                         </h2>
                         <div className="w-[50px] h-0.5 border-b border-dashed border-[rgba(255,255,255,0.21)]"></div>
                         <p className="text-[rgba(255,255,255,0.71)] text-sm sm:text-base leading-6 font-medium mt-7 max-w-full lg:max-w-[600px]">
-                            We have a wide range of pneumatic and vacuum components and conveyor belts specifically suiting the precise needs of the print and packaging industry.
+                            By using this section you can get a small idea. How I've grown my portfolio over the past few years.
                         </p>
                     </div>
 
